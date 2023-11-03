@@ -1,9 +1,10 @@
 #include "game.h"
 #include "raylib.h"
+#include "screenManager/screenGameplay.h"
+#include "elementsManager/bird.h"
 
-//------------------------------------------------------------------------------------
-// Program main entry point
-//------------------------------------------------------------------------------------
+static void update(Bird& bird);
+
 void runGame()
 {
     // Initialization
@@ -13,8 +14,12 @@ void runGame()
 
     InitWindow(screenWidth, screenHeight, "Flappy Bird");
 
+    Bird bird;
+
     SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
     //--------------------------------------------------------------------------------------
+
+    initBird(bird);
 
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
@@ -31,7 +36,7 @@ void runGame()
 
         ClearBackground(RAYWHITE);
 
-        DrawText("Congrats! You created your first window!", 190, 200, 20, LIGHTGRAY);
+        drawGame(bird);
 
         EndDrawing();
         //----------------------------------------------------------------------------------
@@ -42,5 +47,10 @@ void runGame()
     CloseWindow();        // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
 
+    
+}
+
+void update(Bird& bird)
+{
     
 }

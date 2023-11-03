@@ -19,10 +19,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\elementsManager\brid.cpp" />
     <ClCompile Include="src\gameManager\game.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\screenManager\screenGameplay.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\elementsManager\bird.h" />
     <ClInclude Include="src\gameManager\game.h" />
     <ClInclude Include="src\screenManager\screenGameplay.h" />
   </ItemGroup>
