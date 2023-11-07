@@ -27,6 +27,9 @@
     <ClCompile Include="src\elementsManager\brid.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
+    <ClCompile Include="src\elementsManager\wall.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\gameManager\game.h">
@@ -36,6 +39,9 @@
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="src\elementsManager\bird.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="src\elementsManager\wall.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>
