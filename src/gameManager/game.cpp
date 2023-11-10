@@ -17,9 +17,17 @@ void runGame()
 
     InitWindow(screenWidth, screenHeight, "Flappy Bird");
 
+    Texture2D foreground = LoadTexture("res/textures/foreground.png");
+    Texture2D midground = LoadTexture("res/textures/back-buildings.png");
+    Texture2D background = LoadTexture("res/textures/far-buildings.png");
+
     Bird bird;
     Wall wall;
     Wall wall2;
+
+    float scrollingBack = 0.0f;
+    float scrollingMid = 0.0f;
+    float scrollingFore = 0.0f;
 
     initBird(bird);
     initWall(wall);
@@ -28,16 +36,48 @@ void runGame()
 
     while (!WindowShouldClose())
     {
+        scrollingBack -= 10.0f * GetFrameTime();
+        scrollingMid -= 50.0f * GetFrameTime();
+        scrollingFore -= 100.0f * GetFrameTime();
+
+        /*if (scrollingBack <= -background.width * 2) scrollingBack = 0;
+        if (scrollingMid <= -midground.width * 2) scrollingMid = 0;*/
+        if (scrollingFore <= -foreground.width * 2) scrollingFore = static_cast<float>((foreground.width * 2 / scrollingFore));
+
         update(bird, wall, wall2);
 
         BeginDrawing();
 
         ClearBackground(RAYWHITE);
+        //xcopy /y /i /s "$(ProjectDir)res" "$(OutDir)res"
+        /*DrawTextureEx(background, Vector2 { scrollingBack, 300 }, 0.0f, 2.0f, WHITE);
+        DrawTextureEx(background, Vector2 { background.width * 2 + scrollingBack, 300}, 0.0f, 2.0f, WHITE);
+
+        DrawTextureEx(midground, Vector2 { scrollingMid, 300 }, 0.0f, 2.0f, WHITE);
+        DrawTextureEx(midground, Vector2 { midground.width * 2 + scrollingMid, 300 }, 0.0f, 2.0f, WHITE);*/
+
+        DrawTextureEx(foreground, Vector2 { scrollingFore, 350 }, 0.0f, 2.0f, WHITE);
+        DrawTextureEx(foreground, Vector2 { static_cast<float>(foreground.width * 2 + scrollingFore), 350 }, 0.0f, 2.0f, WHITE);
+
+        /*
+        @echo off
+
+echo Configurando git...
+
+git config --global user.email "zequiprieto@gmail.com"
+git config --global user.name "zequi-pv"
+
+echo Git configurado correctamente
+        */
 
         drawGame(bird, wall,wall2);
 
         EndDrawing();
     }
+
+    UnloadTexture(background);  
+    UnloadTexture(midground);   
+    UnloadTexture(foreground);
     CloseWindow();        
 }
 
