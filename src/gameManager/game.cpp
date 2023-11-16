@@ -96,7 +96,7 @@ void runGame()
             break;
         case GameScreen::GAMEPLAY:
             update(bird, wall, wall2, isGameOver, isPaused, currentScreen, continueButton, backButton);
-            drawGame(bird, wall, wall2, scrollingBack, scrollingMid, scrollingFore, background, midground, foreground, isPaused, continueButton, backButton, mouse);
+            drawGame(bird, wall, wall2, scrollingBack, scrollingMid, scrollingFore, background, midground, foreground, isPaused, isGameOver,continueButton, backButton, mouse);
             break;
         case GameScreen::RULES:
             break;
@@ -119,6 +119,7 @@ void runGame()
     UnloadTexture(background);  
     UnloadTexture(midground);   
     UnloadTexture(foreground);
+    UnloadTexture(texBird);
     CloseWindow();        
 }
 
@@ -140,11 +141,18 @@ void update(Bird& bird, Wall& wall, Wall& wall2, bool& isGameOver, bool& isPause
 
     if (!isGameOver && !isPaused)
     {
+        float count = 0;
+        float stopJumping = 10.0f;
         if (IsKeyPressed(KEY_UP)) bird.isRaising = true;
-        if (IsKeyDown(KEY_UP))
+        if (IsKeyDown(KEY_UP) && bird.isRaising)
         {
+            count += GetFrameTime();
             bird.pos.y -= bird.speed * GetFrameTime();
-            
+            if (count >= stopJumping)
+            {
+                count -= stopJumping;
+                bird.isRaising = false;
+            }
         }
         else
         {
