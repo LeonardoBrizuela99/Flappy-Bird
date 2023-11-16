@@ -1,14 +1,13 @@
 #include "game.h"
 #include "raylib.h"
+#include "utilsManager/utils.h"
 #include "screenManager/screenGameplay.h"
+#include "screenManager/screenMenu.h"
+#include "screenManager/screenCredits.h"
 #include "elementsManager/bird.h"
 #include "elementsManager/wall.h"
 
-static void update(Bird& bird, Wall& wall, Wall& wall2);
-static bool birdCollision(Bird bird, Wall wall);
-static bool screenWallCollision(Wall& wall);
-void resetGame(Bird& bird, Wall& wall, Wall& wall2);
- void resetGame(Bird& bird, Wall& wall, Wall& wall2);
+static void update(Bird& bird, Wall& wall, Wall& wall2, bool& isGameOver, bool& isPaused, GameScreen& currentScreen, RectangleButton continueButton, RectangleButton backButton);
 
 void runGame()
 {
@@ -20,58 +19,100 @@ void runGame()
     Texture2D foreground = LoadTexture("res/textures/foreground.png");
     Texture2D midground = LoadTexture("res/textures/back-buildings.png");
     Texture2D background = LoadTexture("res/textures/far-buildings.png");
+    Texture2D texBird = LoadTexture("res/textures/bird.png");
+
+    bool isGameRunning = true;
+    bool isPaused = false;
+    bool isGameOver = false;
 
     Bird bird;
     Wall wall;
     Wall wall2;
+    GameScreen currentScreen = GameScreen::MENU;
+
+    RectangleButton playButton = {};
+    RectangleButton rulesButton = {};
+    RectangleButton creditsButton = {};
+    RectangleButton exitButton = {};
+    RectangleButton continueButton = {};
+    RectangleButton backButton = {};
+    RectangleButton creditsOne = {};
+    RectangleButton creditsTwo = {};
+    RectangleButton creditsThree = {};
+    RectangleButton creditsFour = {};
 
     float scrollingBack = 0.0f;
     float scrollingMid = 0.0f;
     float scrollingFore = 0.0f;
 
     initBird(bird);
+    bird.texture = texBird;
     initWall(wall);
     Vector2 offSetWall2 = { -500,100 };
     initWall(wall2, offSetWall2);
 
-    while (!WindowShouldClose())
+    Vector2 buttonSize = {220, 50};
+    playButton = initButton(playButton, buttonSize);
+    rulesButton = initButton(rulesButton, buttonSize);
+    creditsButton = initButton(creditsButton, buttonSize);
+    exitButton = initButton(exitButton, buttonSize);
+    continueButton = initButton(continueButton, buttonSize);
+    backButton = initButton(backButton, buttonSize);
+    creditsOne = initButton(creditsOne, buttonSize);
+    creditsTwo = initButton(creditsTwo, buttonSize);
+    creditsThree = initButton(creditsThree, buttonSize);
+    creditsFour = initButton(creditsFour, buttonSize);
+
+    while (!WindowShouldClose() && isGameRunning)
     {
-        scrollingBack -= 10.0f * GetFrameTime();
-        scrollingMid -= 50.0f * GetFrameTime();
-        scrollingFore -= 100.0f * GetFrameTime();
-
-        /*if (scrollingBack <= -background.width * 2) scrollingBack = 0;
-        if (scrollingMid <= -midground.width * 2) scrollingMid = 0;*/
-        if (scrollingFore <= -foreground.width * 2) scrollingFore = static_cast<float>((foreground.width * 2 / scrollingFore));
-
-        update(bird, wall, wall2);
+        SetExitKey(NULL);
 
         BeginDrawing();
 
-        ClearBackground(RAYWHITE);
-        //xcopy /y /i /s "$(ProjectDir)res" "$(OutDir)res"
-        /*DrawTextureEx(background, Vector2 { scrollingBack, 300 }, 0.0f, 2.0f, WHITE);
-        DrawTextureEx(background, Vector2 { background.width * 2 + scrollingBack, 300}, 0.0f, 2.0f, WHITE);
+        ClearBackground(BLACK);
 
-        DrawTextureEx(midground, Vector2 { scrollingMid, 300 }, 0.0f, 2.0f, WHITE);
-        DrawTextureEx(midground, Vector2 { midground.width * 2 + scrollingMid, 300 }, 0.0f, 2.0f, WHITE);*/
+        Vector2 mouse = { static_cast<float>(GetMouseX()), static_cast<float>(GetMouseY()) };
 
-        DrawTextureEx(foreground, Vector2 { scrollingFore, 350 }, 0.0f, 2.0f, WHITE);
-        DrawTextureEx(foreground, Vector2 { static_cast<float>(foreground.width * 2 + scrollingFore), 350 }, 0.0f, 2.0f, WHITE);
-
-        /*
-        @echo off
-
-echo Configurando git...
-
-git config --global user.email "zequiprieto@gmail.com"
-git config --global user.name "zequi-pv"
-
-echo Git configurado correctamente
-        */
-
-        drawGame(bird, wall,wall2);
-
+        switch (currentScreen)
+        {
+        case GameScreen::MENU:
+            drawMenu(playButton, rulesButton, creditsButton, exitButton, mouse);
+            if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && playButton.isSelected == true)
+            {
+                currentScreen = GameScreen::GAMEPLAY;
+            }
+            else if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && rulesButton.isSelected == true)
+            {
+                currentScreen = GameScreen::RULES;
+            }
+            else if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && creditsButton.isSelected == true)
+            {
+                currentScreen = GameScreen::CREDITS;
+            }
+            else if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && exitButton.isSelected == true)
+            {
+                currentScreen = GameScreen::EXIT;
+            }
+            break;
+        case GameScreen::GAMEPLAY:
+            update(bird, wall, wall2, isGameOver, isPaused, currentScreen, continueButton, backButton);
+            drawGame(bird, wall, wall2, scrollingBack, scrollingMid, scrollingFore, background, midground, foreground, isPaused, continueButton, backButton, mouse);
+            break;
+        case GameScreen::RULES:
+            break;
+        case GameScreen::CREDITS:
+            drawCredits(backButton, creditsOne, creditsTwo, creditsThree, creditsFour, mouse);
+            if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && backButton.isSelected == true)
+            {
+                currentScreen = GameScreen::MENU;
+            }
+            break;
+        case GameScreen::EXIT:
+            isGameRunning = false;
+            break;
+        default:
+            break;
+        }
         EndDrawing();
     }
 
@@ -81,50 +122,61 @@ echo Git configurado correctamente
     CloseWindow();        
 }
 
-void update(Bird& bird, Wall& wall, Wall& wall2)
+void update(Bird& bird, Wall& wall, Wall& wall2, bool& isGameOver, bool& isPaused, GameScreen& currentScreen, RectangleButton continueButton, RectangleButton backButton)
 {
-    if (IsKeyDown(KEY_UP)) bird.pos.y -= bird.speed * GetFrameTime();
-    if (IsKeyDown(KEY_DOWN)) bird.pos.y += bird.speed * GetFrameTime();
-
-    wall.pos.x -= wall.speed * GetFrameTime();
-    wall2.pos.x -= wall2.speed * GetFrameTime();
-
-    if (birdCollision(bird, wall) || birdCollision(bird, wall2))
+    if (IsKeyPressed(KEY_ESCAPE))
     {
-        resetGame(bird, wall, wall2);
-    
+        isPaused = true;
+    }
+    if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && backButton.isSelected == true)
+    {
+        resetGame(bird, wall, wall2, isPaused);
+        currentScreen = GameScreen::MENU;
+    }
+    if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && continueButton.isSelected == true)
+    {
+        isPaused = false;
     }
 
-    if (screenWallCollision(wall))
+    if (!isGameOver && !isPaused)
     {
-        wall.pos.x = static_cast<float>(GetScreenWidth());
-        int randSize = GetRandomValue(wall.minHeight, wall.maxHeight);
-        wall.size.y = static_cast<float>(randSize);
+        if (IsKeyPressed(KEY_UP)) bird.isRaising = true;
+        if (IsKeyDown(KEY_UP))
+        {
+            bird.pos.y -= bird.speed * GetFrameTime();
+            
+        }
+        else
+        {
+            bird.pos.y += bird.speed * GetFrameTime();
+            bird.isRaising = false;
+        }
+
+        wall.pos.x -= wall.speed * GetFrameTime();
+        wall2.pos.x -= wall2.speed * GetFrameTime();
+
+        if (birdWallCollision(bird, wall) || birdWallCollision(bird, wall2))
+        {
+            resetGame(bird, wall, wall2, isPaused);
+        }
+
+        if (screenWallCollision(wall))
+        {
+            wall.pos.x = static_cast<float>(GetScreenWidth());
+            int randSize = GetRandomValue(wall.minHeight, wall.maxHeight);
+            wall.size.y = static_cast<float>(randSize);
+        }
+
+        if (screenWallCollision(wall2))
+        {
+            wall2.pos.x = static_cast<float>(GetScreenWidth());
+            int randSize = GetRandomValue(wall2.minHeight, wall2.maxHeight);
+            wall2.size.y = static_cast<float>(randSize);
+        }
+
+        if (screenBirdCollision(bird))
+        {
+            resetGame(bird, wall, wall2, isPaused);
+        }
     }
-    if (screenWallCollision(wall2))
-    {
-        wall2.pos.x = static_cast<float>(GetScreenWidth());
-        int randSize = GetRandomValue(wall2.minHeight, wall2.maxHeight);
-        wall2.size.y = static_cast<float>(randSize);
-    }
-}
-
-bool birdCollision(Bird bird, Wall wall)
-{
-    return	bird.pos.x + bird.size.x > wall.pos.x
-        && bird.pos.x < wall.pos.x + wall.size.x
-        && bird.pos.y > wall.pos.y
-        && bird.pos.y < wall.pos.y + wall.size.y;
-}
-
-bool screenWallCollision(Wall& wall)
-{
-    return wall.pos.x + wall.size.x <= 0;
-}
-
-void resetGame(Bird& bird, Wall& wall, Wall& wall2)
-{
-    initBird(bird);
-    initWall(wall);
-    initWall(wall2);
 }

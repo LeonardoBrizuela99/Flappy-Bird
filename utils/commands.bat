@@ -1,1 +1,1 @@
-xcopy "C:\Users\Aula 2\Documents\FlappyBird-Prieto\res" "C:\Users\Aula 2\Documents\FlappyBird-Prieto\bin\Debug\res" /y /i /s
+xcopy "%CD%\res" "%CD%\bin\Debug\res" /y /i /s
