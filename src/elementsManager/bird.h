@@ -6,7 +6,8 @@ struct Bird
 	Vector2 pos;
 	Vector2 size;
 	float speed;
-	Texture2D texture;
+	Texture2D textureOne;
+	Texture2D textureTwo;
 	bool isRaising;
 };
 

@@ -19,7 +19,8 @@ void runGame()
     Texture2D foreground = LoadTexture("res/textures/foreground.png");
     Texture2D midground = LoadTexture("res/textures/back-buildings.png");
     Texture2D background = LoadTexture("res/textures/far-buildings.png");
-    Texture2D texBird = LoadTexture("res/textures/bird.png");
+    Texture2D texBirdOne = LoadTexture("res/textures/birdOne.png");
+    Texture2D texBirdTwo = LoadTexture("res/textures/birdTwo.png");
 
     bool isGameRunning = true;
     bool isPaused = false;
@@ -46,7 +47,8 @@ void runGame()
     float scrollingFore = 0.0f;
 
     initBird(bird);
-    bird.texture = texBird;
+    bird.textureOne = texBirdOne;
+    bird.textureTwo = texBirdTwo;
     initWall(wall);
     Vector2 offSetWall2 = { -500,100 };
     initWall(wall2, offSetWall2);
@@ -119,7 +121,8 @@ void runGame()
     UnloadTexture(background);  
     UnloadTexture(midground);   
     UnloadTexture(foreground);
-    UnloadTexture(texBird);
+    UnloadTexture(texBirdOne);
+    UnloadTexture(texBirdTwo);
     CloseWindow();        
 }
 

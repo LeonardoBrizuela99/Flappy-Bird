@@ -41,27 +41,29 @@ void drawGame(  Bird bird,
         if (scrollingMid <= -midground.width * 2) scrollingMid = 0;
         if (scrollingFore <= -foreground.width * 2) scrollingFore = 0;
 
-        //DrawRectangle(static_cast<int>(bird.pos.x), static_cast<int>(bird.pos.y), static_cast<int>(bird.size.x), static_cast<int>(bird.size.y), RED);
+        DrawRectangle(static_cast<int>(bird.pos.x), static_cast<int>(bird.pos.y), static_cast<int>(bird.size.x), static_cast<int>(bird.size.y), RED);
 
         if (!bird.isRaising)
         {
-            DrawTexturePro(bird.texture,
-                { 98.0f, 230.0f, 48.0f, 32.0f },
+            DrawTexture(bird.textureOne, static_cast<int>(bird.pos.x), static_cast<int>(bird.pos.y), RAYWHITE);
+            /*DrawTexturePro(bird.textureOne,
+                { 0.0f, 0.0f, static_cast<float>(bird.textureOne.width), static_cast<float>(bird.textureOne.height) },
                 { static_cast<float>(bird.pos.x), static_cast<float>(bird.pos.y), static_cast<float>(bird.size.x), static_cast<float>(bird.size.y) },
-                { static_cast<float>(bird.size.x / 3), static_cast<float>(bird.size.y / 3) },
+                { static_cast<float>(bird.size.x / 2), static_cast<float>(bird.size.y / 2) },
                 0.0f,
-                RAYWHITE);
+                RAYWHITE);*/
         }
 
         if (bird.isRaising)
         {
             count += GetFrameTime();
-            DrawTexturePro(bird.texture,
-                { 98.0f, 192.0f, 48.0f, 32.0f },
+            DrawTexture(bird.textureTwo, static_cast<int>(bird.pos.x), static_cast<int>(bird.pos.y), RAYWHITE);
+            /*DrawTexturePro(bird.textureTwo,
+                { 0.0f, 0.0f, static_cast<float>(bird.textureTwo.width), static_cast<float>(bird.textureTwo.height) },
                 { static_cast<float>(bird.pos.x), static_cast<float>(bird.pos.y), static_cast<float>(bird.size.x), static_cast<float>(bird.size.y) },
-                { static_cast<float>(bird.size.x / 3), static_cast<float>(bird.size.y / 3) },
+                { static_cast<float>(bird.size.x), static_cast<float>(bird.size.y) },
                 0.0f,
-                RAYWHITE);
+                RAYWHITE);*/
             if (count >= stopAnimation)
             {
                 count -= stopAnimation;
