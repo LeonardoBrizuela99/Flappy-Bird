@@ -23,6 +23,7 @@
     <ClCompile Include="src\elementsManager\wall.cpp" />
     <ClCompile Include="src\gameManager\game.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\screenManager\Rules.cpp" />
     <ClCompile Include="src\screenManager\screenCredits.cpp" />
     <ClCompile Include="src\screenManager\screenGameplay.cpp" />
     <ClCompile Include="src\screenManager\screenMenu.cpp" />
@@ -33,6 +34,7 @@
     <ClInclude Include="src\elementsManager\bird.h" />
     <ClInclude Include="src\elementsManager\wall.h" />
     <ClInclude Include="src\gameManager\game.h" />
+    <ClInclude Include="src\screenManager\Rules.h" />
     <ClInclude Include="src\screenManager\screenCredits.h" />
     <ClInclude Include="src\screenManager\screenGameplay.h" />
     <ClInclude Include="src\screenManager\screenMenu.h" />

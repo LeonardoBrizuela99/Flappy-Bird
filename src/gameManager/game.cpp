@@ -6,6 +6,9 @@
 #include "screenManager/screenCredits.h"
 #include "elementsManager/bird.h"
 #include "elementsManager/wall.h"
+#include"screenManager/Rules.h"
+#include<iostream>
+using namespace std;
 
 static void update(Bird& bird, Wall& wall, Wall& wall2, bool& isGameOver, bool& isPaused, GameScreen& currentScreen, RectangleButton continueButton, RectangleButton backButton);
 
@@ -32,11 +35,12 @@ void runGame()
     GameScreen currentScreen = GameScreen::MENU;
 
     RectangleButton playButton = {};
+    RectangleButton backButton = {};
     RectangleButton rulesButton = {};
     RectangleButton creditsButton = {};
     RectangleButton exitButton = {};
     RectangleButton continueButton = {};
-    RectangleButton backButton = {};
+    //RectangleButton backButton = {};
     RectangleButton creditsOne = {};
     RectangleButton creditsTwo = {};
     RectangleButton creditsThree = {};
@@ -45,6 +49,8 @@ void runGame()
     float scrollingBack = 0.0f;
     float scrollingMid = 0.0f;
     float scrollingFore = 0.0f;
+
+    initRules();
 
     initBird(bird);
     bird.textureOne = texBirdOne;
@@ -78,7 +84,7 @@ void runGame()
         switch (currentScreen)
         {
         case GameScreen::MENU:
-            drawMenu(playButton, rulesButton, creditsButton, exitButton, mouse);
+            drawMenu(playButton,rulesButton, creditsButton, exitButton, mouse);
             if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && playButton.isSelected == true)
             {
                 currentScreen = GameScreen::GAMEPLAY;
@@ -101,6 +107,12 @@ void runGame()
             drawGame(bird, wall, wall2, scrollingBack, scrollingMid, scrollingFore, background, midground, foreground, isPaused, isGameOver,continueButton, backButton, mouse);
             break;
         case GameScreen::RULES:
+            drawRules(backButton,mouse);
+            if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && backButton.isSelected == true)
+            {
+                currentScreen = GameScreen::MENU;
+            }
+            
             break;
         case GameScreen::CREDITS:
             drawCredits(backButton, creditsOne, creditsTwo, creditsThree, creditsFour, mouse);
@@ -126,49 +138,64 @@ void runGame()
     CloseWindow();        
 }
 
-void update(Bird& bird, Wall& wall, Wall& wall2, bool& isGameOver, bool& isPaused, GameScreen& currentScreen, RectangleButton continueButton, RectangleButton backButton)
+void update(Bird& bird, Wall& wall, Wall& wall2, bool& isGameOver, bool& isPaused, GameScreen& currentScreen,RectangleButton continueButton, RectangleButton backButton)
 {
     if (IsKeyPressed(KEY_ESCAPE))
     {
         isPaused = true;
+       
     }
-    if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && backButton.isSelected == true)
+    if (isPaused)
     {
-        resetGame(bird, wall, wall2, isPaused);
-        currentScreen = GameScreen::MENU;
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && backButton.isSelected == true)
+        {
+            restartGame(bird, wall, wall2, isPaused);
+            currentScreen = GameScreen::MENU;
+        }
+        else if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && continueButton.isSelected == true)
+        {
+            isPaused = false;
+        }
     }
-    if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && continueButton.isSelected == true)
-    {
-        isPaused = false;
-    }
+   
+   
 
     if (!isGameOver && !isPaused)
     {
-        float count = 0;
-        float stopJumping = 10.0f;
-        if (IsKeyPressed(KEY_UP)) bird.isRaising = true;
-        if (IsKeyDown(KEY_UP) && bird.isRaising)
+        if (bird.pos.y<0)
         {
-            count += GetFrameTime();
-            bird.pos.y -= bird.speed * GetFrameTime();
-            if (count >= stopJumping)
-            {
-                count -= stopJumping;
-                bird.isRaising = false;
-            }
+            bird.pos.y = 0;
+
+        }
+        if (IsKeyPressed(KEY_UP) )
+        {
+            bird.aceleration = 0.0f;
+            bird.speed = bird.gravity / 2;
+            bird.isRaising = true;
+            cout << bird.pos.y << endl;
         }
         else
         {
-            bird.pos.y += bird.speed * GetFrameTime();
+
+            if (bird.aceleration>=bird.gravity)
+            {
+                bird.aceleration = bird.gravity;
+            }
             bird.isRaising = false;
+            bird.aceleration += bird.gravity * GetFrameTime();
+            bird.speed -= bird.aceleration * GetFrameTime();
+            bird.pos.y -= bird.speed * GetFrameTime();
         }
 
         wall.pos.x -= wall.speed * GetFrameTime();
         wall2.pos.x -= wall2.speed * GetFrameTime();
 
-        if (birdWallCollision(bird, wall) || birdWallCollision(bird, wall2))
+        if (birdWallCollision(bird, wall) || birdWallCollision(bird, wall2)|| bird.pos.y>=GetScreenHeight())
         {
-            resetGame(bird, wall, wall2, isPaused);
+            bird.pos = { static_cast<float>(GetScreenWidth() / 2 - 300), static_cast<float>(GetScreenHeight() / 2) };
+            bird.lives -= 1;
+            cout << bird.lives << endl;
+           
         }
 
         if (screenWallCollision(wall))
@@ -185,9 +212,15 @@ void update(Bird& bird, Wall& wall, Wall& wall2, bool& isGameOver, bool& isPause
             wall2.size.y = static_cast<float>(randSize);
         }
 
-        if (screenBirdCollision(bird))
+       /* if (screenBirdCollision(bird))
         {
-            resetGame(bird, wall, wall2, isPaused);
+            restartGame(bird, wall, wall2, isPaused);
+        }*/
+        if (bird.lives<=0)
+        {
+            isGameOver = true;
+            resetGame(bird, wall, wall2, isPaused,isGameOver);
+            currentScreen = GameScreen::MENU;
         }
     }
 }

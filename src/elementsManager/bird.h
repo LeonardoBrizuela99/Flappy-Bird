@@ -9,6 +9,10 @@ struct Bird
 	Texture2D textureOne;
 	Texture2D textureTwo;
 	bool isRaising;
+	short int lives;
+	float aceleration;
+	float gravity;
+
 };
 
 void initBird(Bird& bird);

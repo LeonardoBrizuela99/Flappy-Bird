@@ -9,6 +9,7 @@ struct Wall
 	int minHeight;
 	int maxHeight;
 	float speed;
+	bool hit;
 };
 
 void initWall(Wall& wall);

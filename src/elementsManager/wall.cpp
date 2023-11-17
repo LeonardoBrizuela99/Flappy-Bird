@@ -8,6 +8,7 @@ void initWall(Wall& wall)
 	wall.minHeight = 150;
 	wall.maxHeight = 500;
 	wall.speed = 150.0f;
+	wall.hit = false;
 }
 void initWall(Wall& wall,Vector2 posOffset)
 {
@@ -17,4 +18,5 @@ void initWall(Wall& wall,Vector2 posOffset)
 	wall.minHeight = 150;
 	wall.maxHeight = 500;
 	wall.speed = 150.0f;
+	wall.hit = false;
 }

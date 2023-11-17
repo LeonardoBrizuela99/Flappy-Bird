@@ -1,17 +1,14 @@
 #include "screenMenu.h"
 
+
+
 void drawMenu(	RectangleButton& playButton,
 				RectangleButton& rulesButton,
 				RectangleButton& creditsButton,
 				RectangleButton& exitButton,
 				Vector2 mouse)
 {
-	/*DrawTexturePro(menuBackground,
-		{ 0.0f, 0.0f, static_cast<float>(GetScreenWidth()), static_cast<float>(GetScreenHeight()) },
-		{ 0.0f, 0.0f, static_cast<float>(GetScreenWidth()), static_cast<float>(GetScreenHeight()) },
-		{ 0.0f, 0.0f },
-		0.0f,
-		RAYWHITE);*/
+	
 
 	ClearBackground(BLACK);
 
