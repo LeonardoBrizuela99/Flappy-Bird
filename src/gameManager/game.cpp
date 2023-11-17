@@ -50,7 +50,7 @@ void runGame()
     bird.textureOne = texBirdOne;
     bird.textureTwo = texBirdTwo;
     initWall(wall);
-    Vector2 offSetWall2 = { -500,100 };
+    Vector2 offSetWall2 = { wall.pos.x,100 };
     initWall(wall2, offSetWall2);
 
     Vector2 buttonSize = {220, 50};

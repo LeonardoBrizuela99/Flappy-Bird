@@ -11,7 +11,7 @@ void initWall(Wall& wall)
 }
 void initWall(Wall& wall,Vector2 posOffset)
 {
-	wall.pos = { static_cast<float>(GetScreenWidth() - posOffset.x),  static_cast<float>(GetScreenHeight() - posOffset.y)};
+	wall.pos = { static_cast<float>(posOffset.x),  static_cast<float>(GetScreenHeight() - posOffset.y)};
 	wall.size = { 150.0f, 400.0f };
 	wall.color = BROWN;
 	wall.minHeight = 150;
