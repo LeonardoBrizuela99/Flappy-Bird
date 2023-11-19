@@ -50,7 +50,7 @@ void runGame()
     float scrollingMid = 0.0f;
     float scrollingFore = 0.0f;
 
-    initRules();
+    drawRules();
 
     initBird(bird);
     bird.textureOne = texBirdOne;
@@ -107,7 +107,7 @@ void runGame()
             drawGame(bird, wall, wall2, scrollingBack, scrollingMid, scrollingFore, background, midground, foreground, isPaused, isGameOver,continueButton, backButton, mouse);
             break;
         case GameScreen::RULES:
-            drawRules(backButton,mouse);
+            drawRules(/*backButton,mouse*/);
             if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && backButton.isSelected == true)
             {
                 currentScreen = GameScreen::MENU;
@@ -180,13 +180,15 @@ void update(Bird& bird, Wall& wall, Wall& wall2, bool& isGameOver, bool& isPause
             if (bird.aceleration>=bird.gravity)
             {
                 bird.aceleration = bird.gravity;
+                bird.isRaising = false;
             }
-            bird.isRaising = false;
+           
             bird.aceleration += bird.gravity * GetFrameTime();
             bird.speed -= bird.aceleration * GetFrameTime();
             bird.pos.y -= bird.speed * GetFrameTime();
         }
 
+       
         wall.pos.x -= wall.speed * GetFrameTime();
         wall2.pos.x -= wall2.speed * GetFrameTime();
 

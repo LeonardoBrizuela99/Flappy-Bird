@@ -24,7 +24,7 @@
     <ClCompile Include="src\screenManager\screenGameplay.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="src\elementsManager\brid.cpp">
+    <ClCompile Include="src\elementsManager\bird.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
     <ClCompile Include="src\elementsManager\wall.cpp">
