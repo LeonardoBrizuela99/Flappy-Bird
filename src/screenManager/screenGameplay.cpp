@@ -5,30 +5,30 @@ using namespace std;
 void drawGame(  Bird bird, 
                 Wall wall, 
                 Wall wall2, 
-               /* float& scrollingBack, 
+                float& scrollingBack, 
                 float& scrollingMid, 
                 float& scrollingFore,
                 float& scrollingTree,
                 float& scrollingBushTop,
-                float& scrollingBushDown,*/
-               /* Texture2D background,
+                float& scrollingBushDown,
+                Texture2D background,
                 Texture2D midground,
                 Texture2D foreground,
                 Texture2D tree,
                 Texture2D bushTop,
-                Texture2D bushDown,*/
+                Texture2D bushDown,
                 bool isPaused,
-                //bool isGameOver,
+                bool isGameOver,
                 RectangleButton& continueButton,
                 RectangleButton& backButton,
                 RectangleButton& restartButton,
                 Vector2 mouse)
 {
     const int fontSize = 40;
-    /*float count = 0.0f;
-    float stopAnimation = 2.0f;*/
+    float count = 0.0f;
+    float stopAnimation = 2.0f;
 
-   /* DrawTextureEx(background, Vector2{ scrollingBack, 300 }, 0.0f, 2.0f, WHITE);
+    DrawTextureEx(background, Vector2{ scrollingBack, 300 }, 0.0f, 2.0f, WHITE);
     DrawTextureEx(background, Vector2{ background.width * 2 + scrollingBack, 300 }, 0.0f, 2.0f, WHITE);
     DrawTextureEx(background, Vector2{ static_cast<float>((background.width * 3 + scrollingBack) + (GetScreenWidth() / 4.0f)) , 300 }, 0.0f, 2.0f, WHITE);
 
@@ -66,44 +66,44 @@ void drawGame(  Bird bird,
         if (scrollingFore <= -foreground.width * 2) scrollingFore = 0;
         if (scrollingTree <= -tree.width * 2) scrollingTree = 0;
         if (scrollingBushTop <= -bushTop.width * 2) scrollingBushTop = 0;
-        if (scrollingBushDown <= -bushDown.width * 2) scrollingBushDown = 0;*/
+        if (scrollingBushDown <= -bushDown.width * 2) scrollingBushDown = 0;
 
-        DrawRectangle(static_cast<int>(bird.pos.x), static_cast<int>(bird.pos.y), static_cast<int>(bird.size.x), static_cast<int>(bird.size.y), RAYWHITE);
+       // DrawRectangle(static_cast<int>(bird.pos.x), static_cast<int>(bird.pos.y), static_cast<int>(bird.size.x), static_cast<int>(bird.size.y), RAYWHITE);
 
-        //if (!bird.isRaising)
-        //{
-        //    DrawTexture(bird.textureOne, static_cast<int>(bird.pos.x), static_cast<int>(bird.pos.y), RAYWHITE);
-        //    /*DrawTexturePro(bird.textureOne,
-        //        { 0.0f, 0.0f, static_cast<float>(bird.textureOne.width), static_cast<float>(bird.textureOne.height) },
-        //        { static_cast<float>(bird.pos.x), static_cast<float>(bird.pos.y), static_cast<float>(bird.size.x), static_cast<float>(bird.size.y) },
-        //        { static_cast<float>(bird.size.x / 2), static_cast<float>(bird.size.y / 2) },
-        //        0.0f,
-        //        RAYWHITE);*/
-        //}
+        if (!bird.isRaising)
+        {
+            DrawTexture(bird.textureOne, static_cast<int>(bird.pos.x), static_cast<int>(bird.pos.y), RAYWHITE);
+            /*DrawTexturePro(bird.textureOne,
+                { 0.0f, 0.0f, static_cast<float>(bird.textureOne.width), static_cast<float>(bird.textureOne.height) },
+                { static_cast<float>(bird.pos.x), static_cast<float>(bird.pos.y), static_cast<float>(bird.size.x), static_cast<float>(bird.size.y) },
+                { static_cast<float>(bird.size.x / 2), static_cast<float>(bird.size.y / 2) },
+                0.0f,
+                RAYWHITE);*/
+        }
 
-        //if (bird.isRaising)
-        //{
-        //    count += GetFrameTime()*2;
-        //   /* cout << "count: " << count << endl;*/
-        //    DrawTexture(bird.textureTwo, static_cast<int>(bird.pos.x), static_cast<int>(bird.pos.y), RAYWHITE);
-        //    /*DrawTexturePro(bird.textureTwo,
-        //        { 0.0f, 0.0f, static_cast<float>(bird.textureTwo.width), static_cast<float>(bird.textureTwo.height) },
-        //        { static_cast<float>(bird.pos.x), static_cast<float>(bird.pos.y), static_cast<float>(bird.size.x), static_cast<float>(bird.size.y) },
-        //        { static_cast<float>(bird.size.x), static_cast<float>(bird.size.y) },
-        //        0.0f,
-        //        RAYWHITE);*/
-        //    if (count == stopAnimation)
-        //    {
-        //        //count -= stopAnimation;
-        //        count = -stopAnimation;
-        //        cout << "count: " << count << endl;
-        //        bird.isRaising = false;
-        //    }
-        //}
+        if (bird.isRaising)
+        {
+            count += GetFrameTime()*2;
+           /* cout << "count: " << count << endl;*/
+            DrawTexture(bird.textureTwo, static_cast<int>(bird.pos.x), static_cast<int>(bird.pos.y), RAYWHITE);
+            /*DrawTexturePro(bird.textureTwo,
+                { 0.0f, 0.0f, static_cast<float>(bird.textureTwo.width), static_cast<float>(bird.textureTwo.height) },
+                { static_cast<float>(bird.pos.x), static_cast<float>(bird.pos.y), static_cast<float>(bird.size.x), static_cast<float>(bird.size.y) },
+                { static_cast<float>(bird.size.x), static_cast<float>(bird.size.y) },
+                0.0f,
+                RAYWHITE);*/
+            if (count == stopAnimation)
+            {
+                count -= stopAnimation;
+                //count = -stopAnimation;
+                cout << "count: " << count << endl;
+                bird.isRaising = false;
+            }
+        }
         DrawRectangle(static_cast<int>(wall.pos.x), static_cast<int>(wall.pos.y), static_cast<int>(wall.size.x), static_cast<int>(wall.size.y), wall.color);
         DrawRectangle(static_cast<int>(wall2.pos.x), static_cast<int>(wall2.pos.y), static_cast<int>(wall2.size.x), static_cast<int>(wall2.size.y), wall2.color);
 
-   // }
+    }
 
     
     

@@ -15,9 +15,10 @@ void drawCredits(RectangleButton& backButton,
 
     DrawText("CREDITS", (GetScreenWidth() / 2) - 120, (GetScreenHeight() / 2) - 140, 60, WHITE);
 
-    DrawText("Ezequiel Prieto", (GetScreenWidth() / 2) - 200, (GetScreenHeight() / 2) - 20, fontSize, WHITE);
+    DrawText("Ezequiel Prieto/Leonardo Brizuela", (GetScreenWidth() / 2) - 200, (GetScreenHeight() / 2) - 20, fontSize, WHITE);
 
-    DrawText("Fiorella Gaston", (GetScreenWidth() / 2) - 200, (GetScreenHeight() / 2) + 20, fontSize, WHITE);
+    //DrawText("Fiorella Gaston", (GetScreenWidth() / 2) - 200, (GetScreenHeight() / 2) + 20, fontSize, WHITE);
+    //DrawText("Fiorella Gaston", (GetScreenWidth() / 2) - 200, (GetScreenHeight() / 2) + 20, fontSize, WHITE);
 
     backButton.pos.x = static_cast<float>((GetScreenWidth() / 2) - 270);
     backButton.pos.y = static_cast<float>((GetScreenHeight() / 2) + 80);

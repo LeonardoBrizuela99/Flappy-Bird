@@ -53,12 +53,12 @@ void runGame()
     RectangleButton creditsFour = {};
     RectangleButton restartButton = {};
 
-   /* float scrollingBack = 0.0f;
+    float scrollingBack = 0.0f;
     float scrollingMid = 0.0f;
     float scrollingFore = 0.0f;
     float scrollingTree = 0.0f;
     float scrollingBushTop = 0.0f;
-    float scrollingBushDown = 0.0f;*/
+    float scrollingBushDown = 0.0f;
 
    // drawRules(rbackButton,mouse);
 
@@ -92,7 +92,7 @@ void runGame()
 
         Vector2 mouse = { static_cast<float>(GetMouseX()), static_cast<float>(GetMouseY()) };
 
-        currentScreen = GameScreen::GAMEPLAY;
+        
         switch (currentScreen)
         {
         case GameScreen::MENU:
@@ -116,7 +116,7 @@ void runGame()
             break;
         case GameScreen::GAMEPLAY:
             update(bird, wall, wall2, isGameOver, isPaused, currentScreen, continueButton, backButton, restartButton);
-            drawGame(bird, wall, wall2/*, scrollingBack, scrollingMid, scrollingFore, scrollingTree, scrollingBushTop, scrollingBushDown, background, midground, foreground,tree,bushTop,bushDown*/, isPaused/*, isGameOver*/,continueButton, backButton, restartButton, mouse);
+            drawGame(bird, wall, wall2, scrollingBack, scrollingMid, scrollingFore, scrollingTree, scrollingBushTop, scrollingBushDown, background, midground, foreground,tree,bushTop,bushDown, isPaused, isGameOver,continueButton, backButton, restartButton, mouse);
             break;
         case GameScreen::RULES:
             drawRules(backButton,mouse);
@@ -155,12 +155,12 @@ void runGame()
 
 void update(Bird& bird, Wall& wall, Wall& wall2, bool& isGameOver, bool& isPaused, GameScreen& currentScreen,RectangleButton continueButton, RectangleButton backButton, RectangleButton restartButton)
 {
-    /*if (IsKeyPressed(KEY_ESCAPE))
+    if (IsKeyPressed(KEY_ESCAPE))
     {
         isPaused = true;
        
-    }*/
-    DrawText("V 0.1",10,10, 40, RED);
+    }
+    //DrawText("V 0.2",10,10, 40, RED);
     if (isPaused)
     {
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && backButton.isSelected == true)
@@ -191,25 +191,26 @@ void update(Bird& bird, Wall& wall, Wall& wall2, bool& isGameOver, bool& isPause
             bird.pos.y = 0;
 
         }
-        if (IsKeyDown(KEY_UP) )
+        if (IsKeyPressed(KEY_UP) )
         {
-           /* bird.aceleration = 0.0f;
+            bird.aceleration = 0.0f;
             bird.speed = bird.gravity / 2;
             bird.isRaising = true;
-            cout << bird.pos.y << endl;*/
-            bird.pos.y-=500*GetFrameTime();
+            cout << bird.pos.y << endl;
+           // bird.pos.y-=500*GetFrameTime();
         }
-        else if(IsKeyDown(KEY_DOWN))
+        else 
         {
-           // bird.pos.y -= bird.speed * GetFrameTime();
-            /*if (bird.aceleration>=bird.gravity)
+           
+            if (bird.aceleration>=bird.gravity)
             {
                 bird.aceleration = bird.gravity;
                 bird.isRaising = false;
-            }*/
-            bird.pos.y += 500 * GetFrameTime();
-           /* bird.aceleration += bird.gravity * GetFrameTime();
-            bird.speed -= bird.aceleration * GetFrameTime();*/
+            }
+            //bird.pos.y += 500 * GetFrameTime();
+            bird.aceleration += bird.gravity * GetFrameTime();
+            bird.speed -= bird.aceleration * GetFrameTime();
+            bird.pos.y -= bird.speed * GetFrameTime();
            
         }
      /*   bird.pos.y -= bird.speed * GetFrameTime();
