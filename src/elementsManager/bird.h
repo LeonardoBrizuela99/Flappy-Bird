@@ -9,6 +9,7 @@ struct Bird
 	Texture2D textureOne;
 	Texture2D textureTwo;
 	bool isRaising;
+	Color color;
 	short int lives;
 	float aceleration;
 	float gravity;

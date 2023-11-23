@@ -1,7 +1,7 @@
 #pragma once
 #include "utilsManager/utils.h"
 
-void drawRules(
+void drawRules(RectangleButton& backButton, Vector2 mouse
    /* RectangleButton& creditsOne,
     RectangleButton& creditsTwo,
     RectangleButton& creditsThree,

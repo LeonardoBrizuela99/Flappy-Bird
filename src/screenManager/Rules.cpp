@@ -1,17 +1,17 @@
 #include "Rules.h"
 #include"utilsManager/rectangleButton.h"
 
-static Vector2 mouse;
-static RectangleButton backButton = {};
-RectangleButton rulesButton = {};
-Vector2 buttonSize = { 220, 50 };
+//static Vector2 mouse;
+//static RectangleButton backButton = {};
+//RectangleButton rulesButton = {};
+//Vector2 buttonSize = { 220, 50 };
 
-void init()
-{
-    mouse = { static_cast<float>(GetMouseX()), static_cast<float>(GetMouseY()) };
-}
+//void init()
+//{
+//    mouse = { static_cast<float>(GetMouseX()), static_cast<float>(GetMouseY()) };
+//}
 
-void drawRules()
+void drawRules(RectangleButton& backButton, Vector2 mouse)
 {
     
     
