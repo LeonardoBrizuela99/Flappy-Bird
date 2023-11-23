@@ -15,6 +15,8 @@ static void updateMultiplayer(Bird& bird, Bird& bird2, Wall& wall, Wall& wall2, 
 static float timeSinceLastCollision = 0.0f;
 static float collisionTimer = 0.0f;
 static float collisionInterval = 1.0f;
+static int score1 = 0;
+static int score2 = 0;
 
 void runGame()
 {
@@ -127,6 +129,8 @@ void runGame()
         case GameScreen::MULTIPLAYER:
             updateMultiplayer(bird,bird2, wall, wall2, isGameOver, isPaused, currentScreen, continueButton, backButton, restartButton);
             drawGameMultiplayer(bird,bird2, wall, wall2, scrollingBack, scrollingMid, scrollingFore, scrollingTree, scrollingBushTop, scrollingBushDown, background, midground, foreground, tree, bushTop, bushDown, isPaused, isGameOver, continueButton, backButton, restartButton, mouse);
+           // update(bird, wall, wall2, isGameOver, isPaused, currentScreen, continueButton, backButton, restartButton);
+            //drawGame(bird, wall, wall2, scrollingBack, scrollingMid, scrollingFore, scrollingTree, scrollingBushTop, scrollingBushDown, background, midground, foreground, tree, bushTop, bushDown, isPaused, isGameOver, continueButton, backButton, restartButton, mouse);
             break;
         case GameScreen::GAMEPLAY:
             update(bird, wall, wall2, isGameOver, isPaused, currentScreen, continueButton, backButton, restartButton);
@@ -174,7 +178,7 @@ void update(Bird& bird, Wall& wall, Wall& wall2, bool& isGameOver, bool& isPause
         isPaused = true;
        
     }
-    //DrawText("V 0.2",10,10, 40, RED);
+   
     if (isPaused)
     {
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && backButton.isSelected == true)
@@ -210,7 +214,7 @@ void update(Bird& bird, Wall& wall, Wall& wall2, bool& isGameOver, bool& isPause
             bird.aceleration = 0.0f;
             bird.speed = bird.gravity / 2;
             bird.isRaising = true;
-            cout << bird.pos.y << endl;
+           // cout << bird.pos.y << endl;
            // bird.pos.y-=500*GetFrameTime();
         }
         else 
@@ -298,10 +302,11 @@ void update(Bird& bird, Wall& wall, Wall& wall2, bool& isGameOver, bool& isPause
             wall2.size.y = static_cast<float>(randSize);
         }
 
-       /* if (screenBirdCollision(bird))
+        if (wall.pos.x < bird.size.x && /*>wall.size.x &&*/ wall.hit == false)
         {
-            restartGame(bird, wall, wall2, isPaused);
-        }*/
+            score1 += 100;
+            cout << score1 << endl;
+        }
         if (bird.lives<=0)
         {
             isGameOver = true;
@@ -318,7 +323,7 @@ void updateMultiplayer(Bird& bird,Bird& bird2, Wall& wall, Wall& wall2, bool& is
         isPaused = true;
 
     }
-    //DrawText("V 0.2",10,10, 40, RED);
+
     if (isPaused)
     {
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && backButton.isSelected == true)
@@ -376,7 +381,7 @@ void updateMultiplayer(Bird& bird,Bird& bird2, Wall& wall, Wall& wall2, bool& is
         if (IsKeyPressed(KEY_SPACE))
         {
             bird2.aceleration = 0.0f;
-            bird2.speed = bird.gravity / 2;
+            bird2.speed = bird2.gravity / 2;
             bird2.isRaising = true;
             cout << bird2.pos.y << endl;
         }
@@ -420,9 +425,40 @@ void updateMultiplayer(Bird& bird,Bird& bird2, Wall& wall, Wall& wall2, bool& is
                 cout << bird.lives << endl;
 
             }
-        }
 
-        if (wall.hit == true/*||wall2.hit==true*/)
+            if (!wall.hit && birdWallCollision(bird2, wall) || birdWallCollision(bird2, wall2) || bird.pos.y >= GetScreenHeight())
+            {
+                wall.hit = true;
+                bird2.pos = { static_cast<float>(GetScreenWidth() / 2 - 300), static_cast<float>(GetScreenHeight() / 2) };
+                bird2.color = BLUE;
+                bird2.lives -= 1;
+                bird2.speed = 0.0f;
+                collisionTimer = 1.0f;
+                cout << bird2.lives << endl;
+
+            }
+            if (!wall2.hit && birdWallCollision(bird2, wall) || birdWallCollision(bird2, wall2) || bird2.pos.y >= GetScreenHeight())
+            {
+                wall2.hit = true;
+                bird2.pos = { static_cast<float>(GetScreenWidth() / 2 - 300), static_cast<float>(GetScreenHeight() / 2) };
+                bird2.color = BLUE;
+                bird2.lives -= 1;
+                bird2.speed = 0.0f;
+                collisionTimer = 1.0f;
+                cout << bird2.lives << endl;
+
+            }
+            else
+            {
+                score1 += 100;
+            }
+        }
+       /* if (bird.pos.x>wall.size.x&&wall.hit==false)
+        {
+            score1 += 100;
+            cout << score1 << endl;
+        }*/
+        if (wall.hit == true)
         {
             collisionTimer -= GetFrameTime();
 
