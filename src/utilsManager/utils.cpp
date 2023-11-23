@@ -26,7 +26,7 @@ bool screenBirdCollision(Bird& bird)
 	return bird.pos.y <= 0 && bird.pos.y >= GetScreenHeight();
 }
 
-void resetGame(Bird& bird, Wall& wall, Wall& wall2, bool& isPaused,bool& isGameOver)
+void resetGame(Bird& bird,  Wall& wall, Wall& wall2, bool& isPaused,bool& isGameOver)
 {
 	initBird(bird);
 	initWall(wall);
@@ -41,4 +41,24 @@ void restartGame(Bird& bird, Wall& wall, Wall& wall2, bool& isPaused)
 	initWall(wall);
 	initWall(wall2);
 	isPaused = false;
+	
+}
+
+void restartGameMultiplayer(Bird& bird, Bird& bird2, Wall& wall, Wall& wall2, bool& isPaused)
+{
+	initBird(bird);
+	initBird(bird2);
+	initWall(wall);
+	initWall(wall2);
+	isPaused = false;
+}
+
+void resetGameMultiplayer(Bird& bird, Bird& bird2, Wall& wall, Wall& wall2, bool& isPaused, bool& isGameOver)
+{
+	initBird(bird);
+	initBird(bird2);
+	initWall(wall);
+	initWall(wall2);
+	isPaused = false;
+	isGameOver = false;
 }

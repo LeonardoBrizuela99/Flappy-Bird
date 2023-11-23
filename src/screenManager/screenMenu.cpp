@@ -3,6 +3,7 @@
 
 
 void drawMenu(	RectangleButton& playButton,
+              	RectangleButton& multiplayerButton,
 				RectangleButton& rulesButton,
 				RectangleButton& creditsButton,
 				RectangleButton& exitButton,
@@ -14,9 +15,24 @@ void drawMenu(	RectangleButton& playButton,
 
 	const int fontSize = 40;
 
-	DrawText("FLAPPY BIRD", (GetScreenWidth() / 2) - 200, (GetScreenHeight() / 2 - 150), 60, WHITE);
+	DrawText("FLAPPY BIRD", (GetScreenWidth() / 2) - 200, (GetScreenHeight() / 2 - 300), 60, WHITE);
 
 	DrawText("Version 0.2", GetScreenWidth() - 120, GetScreenHeight() - 30, 20, WHITE);
+
+	multiplayerButton.pos.x = (GetScreenWidth() / 2) - (multiplayerButton.size.x / 2);
+	multiplayerButton.pos.y = static_cast<float>(GetScreenHeight() / 2-100) - (multiplayerButton.size.y);
+
+	DrawRectangle(static_cast<int>(multiplayerButton.pos.x),
+		static_cast<int>(multiplayerButton.size.x),
+		static_cast<int>(multiplayerButton.pos.y),
+		static_cast<int>(multiplayerButton.size.y),
+		WHITE);
+
+	DrawText("MULTIPLAYER",
+		static_cast<int>(multiplayerButton.pos.x + 20),
+		static_cast<int>(multiplayerButton.pos.y + 5),
+		fontSize,
+		RED);
 
 	playButton.pos.x = (GetScreenWidth() / 2) - (playButton.size.x / 2);
 	playButton.pos.y = static_cast<float>(GetScreenHeight() / 2) - (playButton.size.y);
@@ -77,6 +93,26 @@ void drawMenu(	RectangleButton& playButton,
 				static_cast<int>(exitButton.pos.y + 5),
 				fontSize,
 				RED);
+
+	if (optionsCollision(mouse, multiplayerButton))
+	{
+		multiplayerButton.isSelected = true;
+		DrawRectangle(static_cast<int>(multiplayerButton.pos.x),
+			static_cast<int>(multiplayerButton.pos.y),
+			static_cast<int>(multiplayerButton.size.x),
+			static_cast<int>(multiplayerButton.size.y),
+			GRAY);
+
+		DrawText("MULTIPLAYER",
+			static_cast<int>(multiplayerButton.pos.x + 20),
+			static_cast<int>(multiplayerButton.pos.y + 5),
+			fontSize,
+			RED);
+	}
+	else if (!optionsCollision(mouse, multiplayerButton))
+	{
+		multiplayerButton.isSelected = false;
+	}
 
 	if (optionsCollision(mouse, playButton))
 	{

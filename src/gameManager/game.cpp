@@ -11,6 +11,7 @@
 using namespace std;
 
 static void update(Bird& bird, Wall& wall, Wall& wall2, bool& isGameOver, bool& isPaused, GameScreen& currentScreen, RectangleButton continueButton, RectangleButton backButton, RectangleButton restartButton);
+static void updateMultiplayer(Bird& bird, Bird& bird2, Wall& wall, Wall& wall2, bool& isGameOver, bool& isPaused, GameScreen& currentScreen, RectangleButton continueButton, RectangleButton backButton, RectangleButton restartButton);
 static float timeSinceLastCollision = 0.0f;
 static float collisionTimer = 0.0f;
 static float collisionInterval = 1.0f;
@@ -35,12 +36,13 @@ void runGame()
     bool isPaused = false;
     bool isGameOver = false;
 
-    Bird bird;
+    Bird bird, bird2;
     Wall wall;
     Wall wall2;
     GameScreen currentScreen = GameScreen::MENU;
 
     RectangleButton playButton = {};
+    RectangleButton multiplayerButton = {};
     RectangleButton backButton = {};
     RectangleButton rulesButton = {};
     RectangleButton creditsButton = {};
@@ -65,12 +67,16 @@ void runGame()
     initBird(bird);
     bird.textureOne = texBirdOne;
     bird.textureTwo = texBirdTwo;
+    initBird(bird2);
+    bird2.textureOne = texBirdOne;
+    bird2.textureTwo = texBirdTwo;
     initWall(wall);
     Vector2 offSetWall2 = { wall.pos.x,100 };
     initWall(wall2, offSetWall2);
 
     Vector2 buttonSize = {220, 50};
     playButton = initButton(playButton, buttonSize);
+    multiplayerButton = initButton(multiplayerButton, buttonSize);
     rulesButton = initButton(rulesButton, buttonSize);
     restartButton = initButton(restartButton, buttonSize);
     creditsButton = initButton(creditsButton, buttonSize);
@@ -96,7 +102,11 @@ void runGame()
         switch (currentScreen)
         {
         case GameScreen::MENU:
-            drawMenu(playButton,rulesButton, creditsButton, exitButton, mouse);
+            drawMenu(playButton, multiplayerButton,rulesButton, creditsButton, exitButton, mouse);
+            if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && multiplayerButton.isSelected == true)
+            {
+                currentScreen = GameScreen::MULTIPLAYER;
+            }
             if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && playButton.isSelected == true)
             {
                 currentScreen = GameScreen::GAMEPLAY;
@@ -113,6 +123,10 @@ void runGame()
             {
                 currentScreen = GameScreen::EXIT;
             }
+            break;
+        case GameScreen::MULTIPLAYER:
+            updateMultiplayer(bird,bird2, wall, wall2, isGameOver, isPaused, currentScreen, continueButton, backButton, restartButton);
+            drawGameMultiplayer(bird,bird2, wall, wall2, scrollingBack, scrollingMid, scrollingFore, scrollingTree, scrollingBushTop, scrollingBushDown, background, midground, foreground, tree, bushTop, bushDown, isPaused, isGameOver, continueButton, backButton, restartButton, mouse);
             break;
         case GameScreen::GAMEPLAY:
             update(bird, wall, wall2, isGameOver, isPaused, currentScreen, continueButton, backButton, restartButton);
@@ -297,45 +311,166 @@ void update(Bird& bird, Wall& wall, Wall& wall2, bool& isGameOver, bool& isPause
     }
 }
 
+void updateMultiplayer(Bird& bird,Bird& bird2, Wall& wall, Wall& wall2, bool& isGameOver, bool& isPaused, GameScreen& currentScreen, RectangleButton continueButton, RectangleButton backButton, RectangleButton restartButton)
+{
+    if (IsKeyPressed(KEY_ESCAPE))
+    {
+        isPaused = true;
+
+    }
+    //DrawText("V 0.2",10,10, 40, RED);
+    if (isPaused)
+    {
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && backButton.isSelected == true)
+        {
+            restartGameMultiplayer(bird,bird2, wall, wall2, isPaused);
+            currentScreen = GameScreen::MENU;
+        }
+        else if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && continueButton.isSelected == true)
+        {
+            isPaused = false;
+
+        }
+        else if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && restartButton.isSelected == true)
+        {
+            restartGameMultiplayer(bird,bird2, wall, wall2, isPaused);
+
+        }
+    }
 
 
-//timeSinceLastCollision += GetFrameTime();
-//
-//if (timeSinceLastCollision > collisionInterval)
-//{
-//    if (!obs.hit && CheckCollisionRecs(GetBirdRect(player), GetRecObstacle(obstacle)) || player.pos.y > GetScreenHeight())
-//    {
-//        obs.hit = true;
-//        player.vidas -= 1;
-//        player.color = BLUE;
-//        player.speed = 0.0f;
-//        collisionTimer = 1.0f;
-//
-//        // Restablecer la posición del jugador
-//        player.pos = { static_cast<float>(GetScreenWidth() / 2) - 500, static_cast<float>(GetScreenHeight() / 2) };
-//
-//#ifdef _DEBUG
-//        cout << "vidas: " << player.vidas << endl;
-//#endif
-//        // Reiniciar el tiempo desde la última colisión
-//        timeSinceLastCollision = 0.0f;
-//
-//        if (player.vidas <= 0)
-//        {
-//            endmatch = true;
-//        }
-//    }
-//}
-//if (obs.hit == true)
-//{
-//    collisionTimer -= GetFrameTime();
-//
-//    if (collisionTimer <= 0.0f)
-//    {
-//        obs.hit = false;
-//        player.color = RED;
-//    }
-//
-//}
-//timeSinceLastCollision += GetFrameTime();
-//}
+
+    if (!isGameOver && !isPaused)
+    {
+        timeSinceLastCollision += GetFrameTime();
+
+        if (bird.pos.y < 0)
+        {
+            bird.pos.y = 0;
+        }
+        if (bird2.pos.y < 0)
+        {
+            bird2.pos.y = 0;
+        }
+
+        if (IsKeyPressed(KEY_UP))
+        {
+            bird.aceleration = 0.0f;
+            bird.speed = bird.gravity / 2;
+            bird.isRaising = true;
+            cout << bird.pos.y << endl;
+        }
+        else
+        {
+
+            if (bird.aceleration >= bird.gravity)
+            {
+                bird.aceleration = bird.gravity;
+                bird.isRaising = false;
+            } 
+            bird.aceleration += bird.gravity * GetFrameTime();
+            bird.speed -= bird.aceleration * GetFrameTime();
+            bird.pos.y -= bird.speed * GetFrameTime();
+        }
+      
+        if (IsKeyPressed(KEY_SPACE))
+        {
+            bird2.aceleration = 0.0f;
+            bird2.speed = bird.gravity / 2;
+            bird2.isRaising = true;
+            cout << bird2.pos.y << endl;
+        }
+        else
+        {
+
+            if (bird2.aceleration >= bird2.gravity)
+            {
+                bird2.aceleration = bird2.gravity;
+                bird2.isRaising = false;
+            }
+            bird2.aceleration += bird2.gravity * GetFrameTime();
+            bird2.speed -= bird2.aceleration * GetFrameTime();
+            bird2.pos.y -= bird2.speed * GetFrameTime();
+        }
+
+        wall.pos.x -= wall.speed * GetFrameTime();
+        wall2.pos.x -= wall2.speed * GetFrameTime();
+
+        if (timeSinceLastCollision > collisionInterval)
+        {
+            if (!wall.hit && birdWallCollision(bird, wall) || birdWallCollision(bird, wall2) || bird.pos.y >= GetScreenHeight())
+            {
+                wall.hit = true;
+                bird.pos = { static_cast<float>(GetScreenWidth() / 2 - 300), static_cast<float>(GetScreenHeight() / 2) };
+                bird.color = BLUE;
+                bird.lives -= 1;
+                bird.speed = 0.0f;
+                collisionTimer = 1.0f;
+                cout << bird.lives << endl;
+
+            }
+            if (!wall2.hit && birdWallCollision(bird, wall) || birdWallCollision(bird, wall2) || bird.pos.y >= GetScreenHeight())
+            {
+                wall2.hit = true;
+                bird.pos = { static_cast<float>(GetScreenWidth() / 2 - 300), static_cast<float>(GetScreenHeight() / 2) };
+                bird.color = BLUE;
+                bird.lives -= 1;
+                bird.speed = 0.0f;
+                collisionTimer = 1.0f;
+                cout << bird.lives << endl;
+
+            }
+        }
+
+        if (wall.hit == true/*||wall2.hit==true*/)
+        {
+            collisionTimer -= GetFrameTime();
+
+            if (collisionTimer <= 0.0f)
+            {
+                wall.hit = false;
+                bird.color = RED;
+            }
+
+        }
+
+        if (wall2.hit == true)
+        {
+            collisionTimer -= GetFrameTime();
+
+            if (collisionTimer <= 0.0f)
+            {
+                wall2.hit = false;
+                bird.color = RED;
+            }
+
+        }
+        timeSinceLastCollision += GetFrameTime();
+
+
+        if (screenWallCollision(wall))
+        {
+            wall.pos.x = static_cast<float>(GetScreenWidth());
+            int randSize = GetRandomValue(wall.minHeight, wall.maxHeight);
+            wall.size.y = static_cast<float>(randSize);
+        }
+
+        if (screenWallCollision(wall2))
+        {
+            wall2.pos.x = static_cast<float>(GetScreenWidth());
+            int randSize = GetRandomValue(wall2.minHeight, wall2.maxHeight);
+            wall2.size.y = static_cast<float>(randSize);
+        }
+
+        /* if (screenBirdCollision(bird))
+         {
+             restartGame(bird, wall, wall2, isPaused);
+         }*/
+        if (bird.lives <= 0||bird2.lives<=0)
+        {
+            isGameOver = true;
+            resetGameMultiplayer(bird,bird2, wall, wall2, isPaused, isGameOver);
+            currentScreen = GameScreen::MENU;
+        }
+    }
+}
