@@ -17,6 +17,9 @@ static float collisionTimer = 0.0f;
 static float collisionInterval = 1.0f;
 static int score1 = 0;
 static int score2 = 0;
+static bool limitJump = false;
+static bool limitJump2 = false;
+
 namespace game
 {
 
@@ -176,7 +179,7 @@ namespace game
 
 void update(Bird& bird, Wall& wall, Wall& wall2, bool& isGameOver, bool& isPaused, GameScreen& currentScreen,RectangleButton continueButton, RectangleButton backButton, RectangleButton restartButton)
 {
-    if (IsKeyPressed(KEY_ESCAPE))
+    if (IsKeyPressed(KEY_ESCAPE)&&isGameOver==false)
     {
         isPaused = true;
        
@@ -200,6 +203,7 @@ void update(Bird& bird, Wall& wall, Wall& wall2, bool& isGameOver, bool& isPause
 
         }
     }
+
     if (isGameOver)
     {
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && backButton.isSelected == true)
@@ -225,9 +229,17 @@ void update(Bird& bird, Wall& wall, Wall& wall2, bool& isGameOver, bool& isPause
         if (bird.pos.y<0)
         {
             bird.pos.y = 0;
+            limitJump = true;
+            bird.aceleration += bird.gravity * GetFrameTime();
+            bird.speed -= bird.aceleration * GetFrameTime();
+            bird.pos.y -= bird.speed * GetFrameTime();
 
         }
-        if (IsKeyPressed(KEY_UP) )
+        else
+        {
+            limitJump = false;
+        }
+        if (IsKeyPressed(KEY_UP)&& limitJump==false )
         {
             bird.aceleration = 0.0f;
             bird.speed = bird.gravity / 2;
@@ -336,7 +348,7 @@ void update(Bird& bird, Wall& wall, Wall& wall2, bool& isGameOver, bool& isPause
 
 void updateMultiplayer(Bird& bird,Bird& bird2, Wall& wall, Wall& wall2, bool& isGameOver, bool& isPaused, GameScreen& currentScreen, RectangleButton continueButton, RectangleButton backButton, RectangleButton restartButton)
 {
-    if (IsKeyPressed(KEY_ESCAPE))
+    if (IsKeyPressed(KEY_ESCAPE)&&isGameOver==false)
     {
         isPaused = true;
 
@@ -384,13 +396,32 @@ void updateMultiplayer(Bird& bird,Bird& bird2, Wall& wall, Wall& wall2, bool& is
         if (bird.pos.y < 0)
         {
             bird.pos.y = 0;
+            limitJump = true;
+            bird.aceleration += bird.gravity * GetFrameTime();
+            bird.speed -= bird.aceleration * GetFrameTime();
+            bird.pos.y -= bird.speed * GetFrameTime();
+
         }
+        else
+        {
+            limitJump = false;
+        }
+       
         if (bird2.pos.y < 0)
         {
             bird2.pos.y = 0;
+            limitJump2 = true;
+            bird2.aceleration += bird2.gravity * GetFrameTime();
+            bird2.speed -= bird2.aceleration * GetFrameTime();
+            bird2.pos.y -= bird2.speed * GetFrameTime();
+
+        }
+        else
+        {
+            limitJump2 = false;
         }
 
-        if (IsKeyPressed(KEY_UP))
+        if (IsKeyPressed(KEY_UP)&&limitJump==false)
         {
             bird.aceleration = 0.0f;
             bird.speed = bird.gravity / 2;
@@ -410,7 +441,7 @@ void updateMultiplayer(Bird& bird,Bird& bird2, Wall& wall, Wall& wall2, bool& is
             bird.pos.y -= bird.speed * GetFrameTime();
         }
       
-        if (IsKeyPressed(KEY_SPACE))
+        if (IsKeyPressed(KEY_SPACE)&&limitJump2==false)
         {
             bird2.aceleration = 0.0f;
             bird2.speed = bird2.gravity / 2;

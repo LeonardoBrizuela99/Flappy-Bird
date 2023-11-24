@@ -111,7 +111,7 @@ void drawGame(  Bird bird,
     {
         DrawRectangle((GetScreenWidth() / 2) - 300, GetScreenHeight() / 2 - 200, 600, 500, BLACK);
 
-        DrawText("GAME OVER", (GetScreenWidth() / 2) - 120, (GetScreenHeight() / 2) - 140, 60, WHITE);
+        DrawText("GAME OVER", (GetScreenWidth() / 2)-200 , (GetScreenHeight() / 2) - 140, 60, WHITE);
 
         backButton.pos.x = static_cast<float>((GetScreenWidth() / 2) - 270);
         backButton.pos.y = static_cast<float>((GetScreenHeight() / 2) + 80);
@@ -410,7 +410,7 @@ void drawGameMultiplayer(Bird bird, Bird bird2, Wall wall, Wall wall2, float& sc
     {
         DrawRectangle((GetScreenWidth() / 2) - 300, GetScreenHeight() / 2 - 200, 600, 500, BLACK);
 
-        DrawText("GAME OVER", (GetScreenWidth() / 2) - 120, (GetScreenHeight() / 2) - 140, 60, WHITE);
+        DrawText("GAME OVER", (GetScreenWidth() / 2) - 250, (GetScreenHeight() / 2) - 140, 60, WHITE);
 
         backButton.pos.x = static_cast<float>((GetScreenWidth() / 2) - 270);
         backButton.pos.y = static_cast<float>((GetScreenHeight() / 2) + 80);
@@ -587,5 +587,3 @@ void drawGameMultiplayer(Bird bird, Bird bird2, Wall wall, Wall wall2, float& sc
         }
     }
 }
-
-
