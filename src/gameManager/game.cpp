@@ -20,158 +20,158 @@ static int score2 = 0;
 namespace game
 {
 
-void runGame()
-{
-    const int screenWidth = 1024;
-    const int screenHeight = 768;
-
-    InitWindow(screenWidth, screenHeight, "Flappy Bird");
-
-    Texture2D foreground = LoadTexture("res/textures/background1.png");
-    Texture2D midground = LoadTexture("res/textures/background2.png");
-    Texture2D background = LoadTexture("res/textures/far-buildings.png");
-    Texture2D tree = LoadTexture("res/textures/trees.png");
-    Texture2D bushTop = LoadTexture("res/textures/frontleaves.png");
-    Texture2D bushDown = LoadTexture("res/textures/pushes.png");
-    Texture2D texBirdOne = LoadTexture("res/textures/Bird2.png");
-    Texture2D texBirdTwo = LoadTexture("res/textures/Bird1.png");
-
-    bool isGameRunning = true;
-    bool isPaused = false;
-    bool isGameOver = false;
-
-    Bird bird, bird2;
-    Wall wall;
-    Wall wall2;
-    GameScreen currentScreen = GameScreen::MENU;
-
-    RectangleButton playButton = {};
-    RectangleButton multiplayerButton = {};
-    RectangleButton backButton = {};
-    RectangleButton rulesButton = {};
-    RectangleButton creditsButton = {};
-    RectangleButton exitButton = {};
-    RectangleButton continueButton = {};
-   // RectangleButton rbackButton = {};
-    RectangleButton creditsOne = {};
-    RectangleButton creditsTwo = {};
-    RectangleButton creditsThree = {};
-    RectangleButton creditsFour = {};
-    RectangleButton restartButton = {};
-
-    float scrollingBack = 0.0f;
-    float scrollingMid = 0.0f;
-    float scrollingFore = 0.0f;
-    float scrollingTree = 0.0f;
-    float scrollingBushTop = 0.0f;
-    float scrollingBushDown = 0.0f;
-
-   // drawRules(rbackButton,mouse);
-
-    initBird(bird);
-    bird.textureOne = texBirdOne;
-    bird.textureTwo = texBirdTwo;
-    initBird(bird2);
-    bird2.textureOne = texBirdOne;
-    bird2.textureTwo = texBirdTwo;
-    initWall(wall);
-    Vector2 offSetWall2 = { wall.pos.x,100 };
-    initWall(wall2, offSetWall2);
-
-    Vector2 buttonSize = {220, 50};
-    playButton = initButton(playButton, buttonSize);
-    multiplayerButton = initButton(multiplayerButton, buttonSize);
-    rulesButton = initButton(rulesButton, buttonSize);
-    restartButton = initButton(restartButton, buttonSize);
-    creditsButton = initButton(creditsButton, buttonSize);
-    exitButton = initButton(exitButton, buttonSize);
-    continueButton = initButton(continueButton, buttonSize);
-    backButton = initButton(backButton, buttonSize);
-    creditsOne = initButton(creditsOne, buttonSize);
-    creditsTwo = initButton(creditsTwo, buttonSize);
-    creditsThree = initButton(creditsThree, buttonSize);
-    creditsFour = initButton(creditsFour, buttonSize);
-
-    while (!WindowShouldClose() && isGameRunning)
+    void runGame()
     {
-        SetExitKey(NULL);
+        const int screenWidth = 1024;
+        const int screenHeight = 768;
 
-        BeginDrawing();
+        InitWindow(screenWidth, screenHeight, "Flappy Bird");
 
-        ClearBackground(BLACK);
+        Texture2D foreground = LoadTexture("res/textures/background1.png");
+        Texture2D midground = LoadTexture("res/textures/background2.png");
+        Texture2D background = LoadTexture("res/textures/far-buildings.png");
+        Texture2D tree = LoadTexture("res/textures/trees.png");
+        Texture2D bushTop = LoadTexture("res/textures/frontleaves.png");
+        Texture2D bushDown = LoadTexture("res/textures/pushes.png");
+        Texture2D texBirdOne = LoadTexture("res/textures/Bird2.png");
+        Texture2D texBirdTwo = LoadTexture("res/textures/Bird1.png");
 
-        Vector2 mouse = { static_cast<float>(GetMouseX()), static_cast<float>(GetMouseY()) };
+        bool isGameRunning = true;
+        bool isPaused = false;
+        bool isGameOver = false;
+
+        Bird bird, bird2;
+        Wall wall;
+        Wall wall2;
+        GameScreen currentScreen = GameScreen::MENU;
+
+        RectangleButton playButton = {};
+        RectangleButton multiplayerButton = {};
+        RectangleButton backButton = {};
+        RectangleButton rulesButton = {};
+        RectangleButton creditsButton = {};
+        RectangleButton exitButton = {};
+        RectangleButton continueButton = {};
+       // RectangleButton rbackButton = {};
+        RectangleButton creditsOne = {};
+        RectangleButton creditsTwo = {};
+        RectangleButton creditsThree = {};
+        RectangleButton creditsFour = {};
+        RectangleButton restartButton = {};
+
+        float scrollingBack = 0.0f;
+        float scrollingMid = 0.0f;
+        float scrollingFore = 0.0f;
+        float scrollingTree = 0.0f;
+        float scrollingBushTop = 0.0f;
+        float scrollingBushDown = 0.0f;
+
+       // drawRules(rbackButton,mouse);
+
+        initBird(bird);
+        bird.textureOne = texBirdOne;
+        bird.textureTwo = texBirdTwo;
+        initBird(bird2);
+        bird2.textureOne = texBirdOne;
+        bird2.textureTwo = texBirdTwo;
+        initWall(wall);
+        Vector2 offSetWall2 = { wall.pos.x,100 };
+        initWall(wall2, offSetWall2);
+
+        Vector2 buttonSize = {220, 50};
+        playButton = initButton(playButton, buttonSize);
+        multiplayerButton = initButton(multiplayerButton, buttonSize);
+        rulesButton = initButton(rulesButton, buttonSize);
+        restartButton = initButton(restartButton, buttonSize);
+        creditsButton = initButton(creditsButton, buttonSize);
+        exitButton = initButton(exitButton, buttonSize);
+        continueButton = initButton(continueButton, buttonSize);
+        backButton = initButton(backButton, buttonSize);
+        creditsOne = initButton(creditsOne, buttonSize);
+        creditsTwo = initButton(creditsTwo, buttonSize);
+        creditsThree = initButton(creditsThree, buttonSize);
+        creditsFour = initButton(creditsFour, buttonSize);
+
+        while (!WindowShouldClose() && isGameRunning)
+        {
+            SetExitKey(NULL);
+
+            BeginDrawing();
+
+            ClearBackground(BLACK);
+
+            Vector2 mouse = { static_cast<float>(GetMouseX()), static_cast<float>(GetMouseY()) };
 
         
-        switch (currentScreen)
-        {
-        case GameScreen::MENU:
-            drawMenu(playButton, multiplayerButton,rulesButton, creditsButton, exitButton, mouse);
-            if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && multiplayerButton.isSelected == true)
+            switch (currentScreen)
             {
-                currentScreen = GameScreen::MULTIPLAYER;
-            }
-            if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && playButton.isSelected == true)
-            {
-                currentScreen = GameScreen::GAMEPLAY;
-            }
-            else if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && rulesButton.isSelected == true)
-            {
-                currentScreen = GameScreen::RULES;
-            }
-            else if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && creditsButton.isSelected == true)
-            {
-                currentScreen = GameScreen::CREDITS;
-            }
-            else if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && exitButton.isSelected == true)
-            {
-                currentScreen = GameScreen::EXIT;
-            }
-            break;
-        case GameScreen::MULTIPLAYER:
-            updateMultiplayer(bird,bird2, wall, wall2, isGameOver, isPaused, currentScreen, continueButton, backButton, restartButton);
-            drawGameMultiplayer(bird,bird2, wall, wall2, scrollingBack, scrollingMid, scrollingFore, scrollingTree, scrollingBushTop, scrollingBushDown, background, midground, foreground, tree, bushTop, bushDown, isPaused, isGameOver, continueButton, backButton, restartButton, mouse);
-           // update(bird, wall, wall2, isGameOver, isPaused, currentScreen, continueButton, backButton, restartButton);
-            //drawGame(bird, wall, wall2, scrollingBack, scrollingMid, scrollingFore, scrollingTree, scrollingBushTop, scrollingBushDown, background, midground, foreground, tree, bushTop, bushDown, isPaused, isGameOver, continueButton, backButton, restartButton, mouse);
-            break;
-        case GameScreen::GAMEPLAY:
-            update(bird, wall, wall2, isGameOver, isPaused, currentScreen, continueButton, backButton, restartButton);
-            drawGame(bird, wall, wall2, scrollingBack, scrollingMid, scrollingFore, scrollingTree, scrollingBushTop, scrollingBushDown, background, midground, foreground,tree,bushTop,bushDown, isPaused, isGameOver,continueButton, backButton, restartButton, mouse);
-            break;
-        case GameScreen::RULES:
-            drawRules(backButton,mouse);
-            if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && backButton.isSelected == true)
-            {
-                currentScreen = GameScreen::MENU;
-            }
+            case GameScreen::MENU:
+                drawMenu(playButton, multiplayerButton,rulesButton, creditsButton, exitButton, mouse);
+                if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && multiplayerButton.isSelected == true)
+                {
+                    currentScreen = GameScreen::MULTIPLAYER;
+                }
+                if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && playButton.isSelected == true)
+                {
+                    currentScreen = GameScreen::GAMEPLAY;
+                }
+                else if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && rulesButton.isSelected == true)
+                {
+                    currentScreen = GameScreen::RULES;
+                }
+                else if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && creditsButton.isSelected == true)
+                {
+                    currentScreen = GameScreen::CREDITS;
+                }
+                else if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && exitButton.isSelected == true)
+                {
+                    currentScreen = GameScreen::EXIT;
+                }
+                break;
+            case GameScreen::MULTIPLAYER:
+                updateMultiplayer(bird,bird2, wall, wall2, isGameOver, isPaused, currentScreen, continueButton, backButton, restartButton);
+                drawGameMultiplayer(bird,bird2, wall, wall2, scrollingBack, scrollingMid, scrollingFore, scrollingTree, scrollingBushTop, scrollingBushDown, background, midground, foreground, tree, bushTop, bushDown, isPaused, isGameOver, continueButton, backButton, restartButton, mouse);
+               // update(bird, wall, wall2, isGameOver, isPaused, currentScreen, continueButton, backButton, restartButton);
+                //drawGame(bird, wall, wall2, scrollingBack, scrollingMid, scrollingFore, scrollingTree, scrollingBushTop, scrollingBushDown, background, midground, foreground, tree, bushTop, bushDown, isPaused, isGameOver, continueButton, backButton, restartButton, mouse);
+                break;
+            case GameScreen::GAMEPLAY:
+                update(bird, wall, wall2, isGameOver, isPaused, currentScreen, continueButton, backButton, restartButton);
+                drawGame(bird, wall, wall2, scrollingBack, scrollingMid, scrollingFore, scrollingTree, scrollingBushTop, scrollingBushDown, background, midground, foreground,tree,bushTop,bushDown, isPaused, isGameOver,continueButton, backButton, restartButton, mouse);
+                break;
+            case GameScreen::RULES:
+                drawRules(backButton,mouse);
+                if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && backButton.isSelected == true)
+                {
+                    currentScreen = GameScreen::MENU;
+                }
             
-            break;
-        case GameScreen::CREDITS:
-            drawCredits(backButton, creditsOne, creditsTwo, creditsThree, creditsFour, mouse);
-            if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && backButton.isSelected == true)
-            {
-                currentScreen = GameScreen::MENU;
+                break;
+            case GameScreen::CREDITS:
+                drawCredits(backButton, creditsOne, creditsTwo, creditsThree, creditsFour, mouse);
+                if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && backButton.isSelected == true)
+                {
+                    currentScreen = GameScreen::MENU;
+                }
+                break;
+            case GameScreen::EXIT:
+                isGameRunning = false;
+                break;
+            default:
+                break;
             }
-            break;
-        case GameScreen::EXIT:
-            isGameRunning = false;
-            break;
-        default:
-            break;
+            EndDrawing();
         }
-        EndDrawing();
-    }
 
-    UnloadTexture(background);  
-    UnloadTexture(midground);   
-    UnloadTexture(foreground);
-    UnloadTexture(tree);
-    UnloadTexture(bushTop);
-    UnloadTexture(bushDown);
-    UnloadTexture(texBirdOne);
-    UnloadTexture(texBirdTwo);
-    CloseWindow();        
-}
+        UnloadTexture(background);  
+        UnloadTexture(midground);   
+        UnloadTexture(foreground);
+        UnloadTexture(tree);
+        UnloadTexture(bushTop);
+        UnloadTexture(bushDown);
+        UnloadTexture(texBirdOne);
+        UnloadTexture(texBirdTwo);
+        CloseWindow();        
+    }
 }
 
 void update(Bird& bird, Wall& wall, Wall& wall2, bool& isGameOver, bool& isPaused, GameScreen& currentScreen,RectangleButton continueButton, RectangleButton backButton, RectangleButton restartButton)
@@ -197,6 +197,21 @@ void update(Bird& bird, Wall& wall, Wall& wall2, bool& isGameOver, bool& isPause
         else if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && restartButton.isSelected == true)
         {
             restartGame(bird, wall, wall2, isPaused);
+
+        }
+    }
+    if (isGameOver)
+    {
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && backButton.isSelected == true)
+        {
+            restartGame(bird, wall, wall2, isPaused);
+            currentScreen = GameScreen::MENU;
+            isGameOver = false;
+        }
+        else if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && restartButton.isSelected == true)
+        {
+            restartGame(bird, wall, wall2, isPaused);
+            isGameOver = false;
 
         }
     }
@@ -313,8 +328,8 @@ void update(Bird& bird, Wall& wall, Wall& wall2, bool& isGameOver, bool& isPause
         if (bird.lives<=0)
         {
             isGameOver = true;
-            resetGame(bird, wall, wall2, isPaused,isGameOver);
-            currentScreen = GameScreen::MENU;
+            /*resetGame(bird, wall, wall2, isPaused,isGameOver);
+            currentScreen = GameScreen::MENU;*/
         }
     }
 }
@@ -345,7 +360,21 @@ void updateMultiplayer(Bird& bird,Bird& bird2, Wall& wall, Wall& wall2, bool& is
 
         }
     }
+    if (isGameOver)
+    {
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && backButton.isSelected == true)
+        {
+            restartGame(bird, wall, wall2, isPaused);
+            currentScreen = GameScreen::MENU;
+            isGameOver = false;
+        }
+        else if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && restartButton.isSelected == true)
+        {
+            restartGame(bird, wall, wall2, isPaused);
+            isGameOver = false;
 
+        }
+    }
 
 
     if (!isGameOver && !isPaused)
@@ -502,11 +531,10 @@ void updateMultiplayer(Bird& bird,Bird& bird2, Wall& wall, Wall& wall2, bool& is
         }
 
         
-        if (bird.lives <= 0||bird2.lives<=0)
+        if (bird.lives <= 0&&bird2.lives<=0)
         {
             isGameOver = true;
-            resetGameMultiplayer(bird,bird2, wall, wall2, isPaused, isGameOver);
-            currentScreen = GameScreen::MENU;
+           
         }
     }
 }

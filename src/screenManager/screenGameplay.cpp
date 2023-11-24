@@ -107,7 +107,78 @@ void drawGame(  Bird bird,
 
     }
 
-    
+    if (isGameOver)
+    {
+        DrawRectangle((GetScreenWidth() / 2) - 300, GetScreenHeight() / 2 - 200, 600, 500, BLACK);
+
+        DrawText("GAME OVER", (GetScreenWidth() / 2) - 120, (GetScreenHeight() / 2) - 140, 60, WHITE);
+
+        backButton.pos.x = static_cast<float>((GetScreenWidth() / 2) - 270);
+        backButton.pos.y = static_cast<float>((GetScreenHeight() / 2) + 80);
+
+        DrawRectangle(static_cast<int>(backButton.pos.x), static_cast<int>(backButton.pos.y), static_cast<int>(backButton.size.x), static_cast<int>(backButton.size.y), WHITE);
+
+        DrawText("BACK",
+            static_cast<int>(backButton.pos.x + 20),
+            static_cast<int>(backButton.pos.y + 5),
+            fontSize,
+            RED);
+
+        if (optionsCollision(mouse, backButton))
+        {
+            backButton.isSelected = true;
+            DrawRectangle(static_cast<int>(backButton.pos.x),
+                static_cast<int>(backButton.pos.y),
+                static_cast<int>(backButton.size.x),
+                static_cast<int>(backButton.size.y),
+                GRAY);
+
+            DrawText("BACK",
+                static_cast<int>(backButton.pos.x + 20),
+                static_cast<int>(backButton.pos.y + 5),
+                fontSize,
+                RED);
+        }
+        else if (!optionsCollision(mouse, backButton))
+        {
+            backButton.isSelected = false;
+        }
+        restartButton.pos.x = static_cast<float>((GetScreenWidth() / 2) - 100);
+        restartButton.pos.y = static_cast<float>((GetScreenHeight() / 2) + 200);
+
+        DrawRectangle(static_cast<int>(restartButton.pos.x),
+            static_cast<int>(restartButton.pos.y),
+            static_cast<int>(restartButton.size.x),
+            static_cast<int>(restartButton.size.y),
+            WHITE);
+
+        DrawText("RESTART",
+            static_cast<int>(restartButton.pos.x + 10),
+            static_cast<int>(restartButton.pos.y + 10),
+            fontSize,
+            RED);
+
+        if (optionsCollision(mouse, restartButton))
+        {
+            restartButton.isSelected = true;
+            DrawRectangle(static_cast<int>(restartButton.pos.x),
+                static_cast<int>(restartButton.pos.y),
+                static_cast<int>(restartButton.size.x),
+                static_cast<int>(restartButton.size.y),
+                GRAY);
+
+            DrawText("RESTART",
+                static_cast<int>(restartButton.pos.x + 10),
+                static_cast<int>(restartButton.pos.y + 10),
+                fontSize,
+                RED);
+        }
+        else if (!optionsCollision(mouse, restartButton))
+        {
+            restartButton.isSelected = false;
+
+        }
+    }
     
     if (isPaused)
     {
@@ -333,6 +404,79 @@ void drawGameMultiplayer(Bird bird, Bird bird2, Wall wall, Wall wall2, float& sc
         }
         DrawRectangle(static_cast<int>(wall.pos.x), static_cast<int>(wall.pos.y), static_cast<int>(wall.size.x), static_cast<int>(wall.size.y), wall.color);
         DrawRectangle(static_cast<int>(wall2.pos.x), static_cast<int>(wall2.pos.y), static_cast<int>(wall2.size.x), static_cast<int>(wall2.size.y), wall2.color);
+    }
+
+    if (isGameOver)
+    {
+        DrawRectangle((GetScreenWidth() / 2) - 300, GetScreenHeight() / 2 - 200, 600, 500, BLACK);
+
+        DrawText("GAME OVER", (GetScreenWidth() / 2) - 120, (GetScreenHeight() / 2) - 140, 60, WHITE);
+
+        backButton.pos.x = static_cast<float>((GetScreenWidth() / 2) - 270);
+        backButton.pos.y = static_cast<float>((GetScreenHeight() / 2) + 80);
+
+        DrawRectangle(static_cast<int>(backButton.pos.x), static_cast<int>(backButton.pos.y), static_cast<int>(backButton.size.x), static_cast<int>(backButton.size.y), WHITE);
+
+        DrawText("BACK",
+            static_cast<int>(backButton.pos.x + 20),
+            static_cast<int>(backButton.pos.y + 5),
+            fontSize,
+            RED);
+
+        if (optionsCollision(mouse, backButton))
+        {
+            backButton.isSelected = true;
+            DrawRectangle(static_cast<int>(backButton.pos.x),
+                static_cast<int>(backButton.pos.y),
+                static_cast<int>(backButton.size.x),
+                static_cast<int>(backButton.size.y),
+                GRAY);
+
+            DrawText("BACK",
+                static_cast<int>(backButton.pos.x + 20),
+                static_cast<int>(backButton.pos.y + 5),
+                fontSize,
+                RED);
+        }
+        else if (!optionsCollision(mouse, backButton))
+        {
+            backButton.isSelected = false;
+        }
+        restartButton.pos.x = static_cast<float>((GetScreenWidth() / 2) - 100);
+        restartButton.pos.y = static_cast<float>((GetScreenHeight() / 2) + 200);
+
+        DrawRectangle(static_cast<int>(restartButton.pos.x),
+            static_cast<int>(restartButton.pos.y),
+            static_cast<int>(restartButton.size.x),
+            static_cast<int>(restartButton.size.y),
+            WHITE);
+
+        DrawText("RESTART",
+            static_cast<int>(restartButton.pos.x + 10),
+            static_cast<int>(restartButton.pos.y + 10),
+            fontSize,
+            RED);
+
+        if (optionsCollision(mouse, restartButton))
+        {
+            restartButton.isSelected = true;
+            DrawRectangle(static_cast<int>(restartButton.pos.x),
+                static_cast<int>(restartButton.pos.y),
+                static_cast<int>(restartButton.size.x),
+                static_cast<int>(restartButton.size.y),
+                GRAY);
+
+            DrawText("RESTART",
+                static_cast<int>(restartButton.pos.x + 10),
+                static_cast<int>(restartButton.pos.y + 10),
+                fontSize,
+                RED);
+        }
+        else if (!optionsCollision(mouse, restartButton))
+        {
+            restartButton.isSelected = false;
+
+        }
     }
 
     if (isPaused)
