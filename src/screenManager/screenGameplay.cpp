@@ -64,9 +64,11 @@ void drawGame(  Bird bird,
         if (scrollingBack <= -background.width * 2) scrollingBack = 0;
         if (scrollingMid <= -midground.width * 2) scrollingMid = 0;
         if (scrollingFore <= -foreground.width * 2) scrollingFore = 0;
-        if (scrollingTree <= -tree.width * 2) scrollingTree = 0;
+        if (scrollingTree <= -tree.width * 2.5) scrollingTree =0;
         if (scrollingBushTop <= -bushTop.width * 2) scrollingBushTop = 0;
         if (scrollingBushDown <= -bushDown.width * 2) scrollingBushDown = 0;
+
+        cout << scrollingTree << endl;
 
        // DrawRectangle(static_cast<int>(bird.pos.x), static_cast<int>(bird.pos.y), static_cast<int>(bird.size.x), static_cast<int>(bird.size.y), RAYWHITE);
 

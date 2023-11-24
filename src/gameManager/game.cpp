@@ -17,6 +17,8 @@ static float collisionTimer = 0.0f;
 static float collisionInterval = 1.0f;
 static int score1 = 0;
 static int score2 = 0;
+namespace game
+{
 
 void runGame()
 {
@@ -170,6 +172,7 @@ void runGame()
     UnloadTexture(texBirdTwo);
     CloseWindow();        
 }
+}
 
 void update(Bird& bird, Wall& wall, Wall& wall2, bool& isGameOver, bool& isPaused, GameScreen& currentScreen,RectangleButton continueButton, RectangleButton backButton, RectangleButton restartButton)
 {
@@ -305,7 +308,7 @@ void update(Bird& bird, Wall& wall, Wall& wall2, bool& isGameOver, bool& isPause
         if (wall.pos.x < bird.size.x && /*>wall.size.x &&*/ wall.hit == false)
         {
             score1 += 100;
-            cout << score1 << endl;
+            /*cout << score1 << endl;*/
         }
         if (bird.lives<=0)
         {
@@ -498,10 +501,7 @@ void updateMultiplayer(Bird& bird,Bird& bird2, Wall& wall, Wall& wall2, bool& is
             wall2.size.y = static_cast<float>(randSize);
         }
 
-        /* if (screenBirdCollision(bird))
-         {
-             restartGame(bird, wall, wall2, isPaused);
-         }*/
+        
         if (bird.lives <= 0||bird2.lives<=0)
         {
             isGameOver = true;

@@ -1,6 +1,6 @@
 #include "gameManager/game.h"
-
+using namespace game;
 int main(void)
 {
-	runGame();
+	game::runGame();
 }
