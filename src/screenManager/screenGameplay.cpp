@@ -18,7 +18,7 @@ void drawGame(
     static float scrollingTree = 0.0f;
     static float scrollingBushTop = 0.0f;
     static float scrollingBushDown = 0.0f;
-    const int fontSize = 40;
+    
     
     DrawTextureEx(background, Vector2{ scrollingBack, 200 }, 0.0f, 2.0f, WHITE);
     DrawTextureEx(background, Vector2{ background.width * 2 + scrollingBack, 200 }, 0.0f, 2.0f, WHITE);

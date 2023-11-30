@@ -19,17 +19,19 @@ namespace game
 	void InitSounds(SoundsGame& soundsGame);
 	void InitButtons(GameRectangleButton& gameButtons);
 	void GameScreenMenu(GameRectangleButton& gameButtons, GameScreen& currentScreen, Vector2& mouse);
-	void GameScreenMultiplayer(SoundsGame& soundsGame, Bird& bird, Bird& bird2, Wall& firstPipe, Wall& secondPipe, bool& isPaused, GameRectangleButton& gameButtons, GameTextures& gameTextures, GameScreen& currentScreen, Vector2 mouse);
-	void GameScreenSingleplayer(SoundsGame& soundsGame, Bird& bird, Wall& firstWall, Wall& secondWall, bool& isPaused, GameRectangleButton& gameButtons, GameTextures& gameTextures, GameScreen& currentScreen, Vector2 mouse);
+	void GameScreenMultiplayer(SoundsGame& soundsGame, Bird& bird, Bird& bird2, Wall& firstPipe, Wall& secondPipe, bool& isPaused, bool& isGameOver, GameRectangleButton& gameButtons, GameTextures& gameTextures, GameScreen& currentScreen, Vector2 mouse);
+	void GameScreenSingleplayer(SoundsGame& soundsGame, Bird& bird, Wall& firstWall, Wall& secondWall, bool& isPaused, bool& isGameOver, GameRectangleButton& gameButtons, GameTextures& gameTextures, GameScreen& currentScreen, Vector2 mouse);
 	void GameScreenCredits(GameRectangleButton& gameButtons, GameScreen& currentScreen, Vector2& mouse);
 	void GameScreenRules(GameRectangleButton& gameButtons, GameScreen& currentScreen, Vector2& mouse);
 	void DeInitTextures(GameTextures& gameTextures);
 	void DeInitSounds(SoundsGame& soundsGame);
 	void PauseScreen(GameRectangleButton& gameButtons, Vector2& mouse, bool& isPaused);
-	void GameOverScreen(GameRectangleButton& gameButtons, Vector2& mouse, bool& isGameOver);
+	void GameOverScreen(GameRectangleButton& gameButtons, Vector2& mouse, bool& isGameOver,Bird& bird);
+	
     
 	static int fontSize = 40;
-	 bool isGameOver = false;
+
+
 	 bool isGameRunning = true;
 	
 	void runGame()
@@ -37,8 +39,9 @@ namespace game
        
 		const int screenWidth = 1024;
 		const int screenHeight = 768;
-		bool isPaused = false;
 
+		bool isPaused = false;
+	    bool isGameOver = false;
 		InitWindow(screenWidth, screenHeight, "Flappy Bird");
 		InitAudioDevice();
 		SoundsGame soundsGame;
@@ -80,12 +83,12 @@ namespace game
 				break;
 			case GameScreen::MULTIPLAYER:
 
-				GameScreenMultiplayer(soundsGame, bird,bird2, firstWall, secondWall, isPaused, gameButtons, gameTextures, currentScreen, mouse);
+				GameScreenMultiplayer(soundsGame, bird,bird2, firstWall, secondWall, isPaused,isGameOver, gameButtons, gameTextures, currentScreen, mouse);
 				
 				break;
 			case GameScreen::GAMEPLAY:
 				
-				GameScreenSingleplayer(soundsGame,bird, firstWall,secondWall, isPaused,gameButtons,gameTextures, currentScreen, mouse);
+				GameScreenSingleplayer(soundsGame,bird, firstWall,secondWall, isPaused,isGameOver,gameButtons,gameTextures, currentScreen, mouse);
 				break;
 			case GameScreen::RULES:
 				
@@ -147,7 +150,7 @@ namespace game
 	}
 	void PauseScreen(GameRectangleButton& gameButtons, Vector2& mouse,bool& isPaused)
 	{
-		int fontSize = 40;
+		//int fontSize = 40;
 		if (isPaused)
 		{
 			DrawRectangle((GetScreenWidth() / 2) - 300, GetScreenHeight() / 2 - 200, 600, 500, BLACK);
@@ -256,11 +259,15 @@ namespace game
 			}
 		}
 	}
-	void GameOverScreen(GameRectangleButton& gameButtons, Vector2& mouse, bool& isGameOver)
+	void GameOverScreen(GameRectangleButton& gameButtons, Vector2& mouse, bool& isGameOver, Bird& bird)
 	{
 		if (isGameOver)
 		{
+			int score = bird.score;
+			int playerScore =score;
+		
 			DrawRectangle((GetScreenWidth() / 2) - 300, GetScreenHeight() / 2 - 200, 600, 500, BLACK);
+			DrawText(TextFormat(" Score: %02i", playerScore), (GetScreenWidth() / 2-100) , (GetScreenHeight() / 2) + 200, 40, WHITE);
 
 			DrawText("GAME OVER", (GetScreenWidth() / 2) - 200, (GetScreenHeight() / 2) - 140, 60, WHITE);
 
@@ -294,9 +301,9 @@ namespace game
 			{
 				gameButtons.backButton.isSelected = false;
 			}
-			gameButtons.restartButton.pos.x = static_cast<float>((GetScreenWidth() / 2) - 100);
-			gameButtons.restartButton.pos.y = static_cast<float>((GetScreenHeight() / 2) + 200);
-
+			gameButtons.restartButton.pos.x = static_cast<float>((GetScreenWidth() / 2) + 50);
+			gameButtons.restartButton.pos.y = static_cast<float>((GetScreenHeight() / 2) + 80);
+			
 			DrawRectangle(static_cast<int>(gameButtons.restartButton.pos.x),
 				static_cast<int>(gameButtons.restartButton.pos.y),
 				static_cast<int>(gameButtons.restartButton.size.x),
@@ -304,8 +311,8 @@ namespace game
 				WHITE);
 
 			DrawText("RESTART",
-				static_cast<int>(gameButtons.restartButton.pos.x + 10),
-				static_cast<int>(gameButtons.restartButton.pos.y + 10),
+				static_cast<int>(gameButtons.restartButton.pos.x + 5),
+				static_cast<int>(gameButtons.restartButton.pos.y + 5),
 				fontSize,
 				RED);
 
@@ -319,20 +326,21 @@ namespace game
 					GRAY);
 
 				DrawText("RESTART",
-					static_cast<int>(gameButtons.restartButton.pos.x + 10),
-					static_cast<int>(gameButtons.restartButton.pos.y + 10),
+					static_cast<int>(gameButtons.restartButton.pos.x + 5),
+					static_cast<int>(gameButtons.restartButton.pos.y + 5),
 					fontSize,
 					RED);
 			}
 			else if (!optionsCollision(mouse, gameButtons.restartButton))
 			{
 				gameButtons.restartButton.isSelected = false;
-
 			}
+			
 		}
 
 
 	}
+	
 	void InitButtons(GameRectangleButton& gameButtons)
 	{
 		Vector2 buttonSize = { 220, 50 };
@@ -375,6 +383,7 @@ namespace game
 		if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && gameButtons.playButton.isSelected == true)
 		{
 			currentScreen = GameScreen::GAMEPLAY;
+			
 		}
 		else if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && gameButtons.rulesButton.isSelected == true)
 		{
@@ -389,7 +398,7 @@ namespace game
 			currentScreen = GameScreen::EXIT;
 		}
 	}
-	void GameScreenMultiplayer(SoundsGame& soundsGame, Bird& bird,Bird& bird2, Wall& firstWall, Wall& secondWall, bool& isPaused, GameRectangleButton& gameButtons, GameTextures& gameTextures, GameScreen& currentScreen, Vector2 mouse)
+	void GameScreenMultiplayer(SoundsGame& soundsGame, Bird& bird,Bird& bird2, Wall& firstWall, Wall& secondWall, bool& isPaused, bool& isGameOver, GameRectangleButton& gameButtons, GameTextures& gameTextures, GameScreen& currentScreen, Vector2 mouse)
 	{
 		if (isPaused)
 		{
@@ -420,6 +429,7 @@ namespace game
 		if (isGameOver)
 		{
 			static bool hasPlayedLoseSound = false;
+			DrawText(TextFormat(" Score: %i", bird.score), 0, 0, 40, WHITE);
 			if (!hasPlayedLoseSound)
 			{
 				PlaySound(soundsGame.lose);
@@ -431,8 +441,8 @@ namespace game
 				currentScreen = GameScreen::MENU;
 				isGameOver = false;
 				hasPlayedLoseSound = false;
-				RestartBird(bird);
-				RestartBird(bird2);
+				InitBird(bird);
+				InitBird(bird2);
 				ResetWall(firstWall, secondWall);
 
 			}
@@ -463,10 +473,12 @@ namespace game
 			DrawWall(firstWall);
 			DrawWall(secondWall);
 			PauseScreen(gameButtons,mouse,isPaused);
-			GameOverScreen(gameButtons, mouse, isGameOver);
+			GameOverScreen(gameButtons, mouse, isGameOver, bird);
+			DrawText(TextFormat(" Score: %i", bird.score), 0, 0, 40, WHITE);
+
 		}
 	}
-	void GameScreenSingleplayer(SoundsGame& soundsGame,Bird& bird, Wall& firstWall, Wall& secondWall,bool &isPaused, GameRectangleButton& gameButtons, GameTextures& gameTextures, GameScreen& currentScreen, Vector2 mouse)
+	void GameScreenSingleplayer(SoundsGame& soundsGame,Bird& bird, Wall& firstWall, Wall& secondWall,bool &isPaused, bool& isGameOver, GameRectangleButton& gameButtons, GameTextures& gameTextures, GameScreen& currentScreen, Vector2 mouse)
 	{
 		if (isPaused)
 		{
@@ -496,6 +508,12 @@ namespace game
 		if (isGameOver)
 		{
 			static bool hasPlayedLoseSound = false;
+			
+
+			
+			DrawText(TextFormat("Score: %i", bird.score), 0, 0, 40, WHITE);
+
+
 			if (!hasPlayedLoseSound)
 			{
 				PlaySound(soundsGame.lose);
@@ -507,13 +525,13 @@ namespace game
 				currentScreen = GameScreen::MENU;
 				isGameOver = false;
 				hasPlayedLoseSound = false;
-				RestartBird(bird);
+				InitBird(bird);
 				ResetWall(firstWall, secondWall);
 
 			}
 			else if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && gameButtons.restartButton.isSelected == true)
 			{
-				
+				bird.score = bird.score;
 				isGameOver = false;
 				hasPlayedLoseSound = false;
 				RestartBird(bird);
@@ -536,7 +554,9 @@ namespace game
 			DrawWall(firstWall);
 			DrawWall(secondWall);
 			PauseScreen(gameButtons, mouse, isPaused);
-			GameOverScreen(gameButtons,mouse,isGameOver);
+			GameOverScreen(gameButtons,mouse,isGameOver, bird);
+			DrawText(TextFormat(" Score: %i", bird.score), 0, 0, 40, WHITE);
+			cout << bird.score << endl;
 			
 		}	
 	}

@@ -4,6 +4,7 @@
 using namespace std;
 static float count_Timer = 0.0f;
 static float stopAnimation = 2.0f;
+static int maxScore = 0;
 
 Bird InitBird(Bird& bird)
 {
@@ -16,6 +17,19 @@ Bird InitBird(Bird& bird)
 	bird.lives = 3;
 	bird.score = 0;
 
+	return bird;
+}
+
+Bird ResetBird(Bird& bird)
+{
+	bird.pos = { static_cast<float>(GetScreenWidth() / 2 - 100),static_cast<float>(GetScreenHeight() / 2) };
+	bird.size = { 40.0f,35.0f };
+	bird.speed = 0.0f;
+	bird.isRaising = false;
+	bird.aceleration = 0.0f;
+	bird.gravity = 400.f;
+	bird.lives = 3;
+	bird.score = bird.score;
 	return bird;
 }
 
@@ -54,7 +68,8 @@ void DrawBird(Bird& bird, bool& isPaused)
 {
 	if (!isPaused)
 	{
-		DrawRectangle(static_cast<int>(bird.pos.x), static_cast<int>(bird.pos.y), static_cast<int>(bird.size.x), static_cast<int>(bird.size.y), RED);
+		
+		//DrawRectangle(static_cast<int>(bird.pos.x), static_cast<int>(bird.pos.y), static_cast<int>(bird.size.x), static_cast<int>(bird.size.y), RED);
 		if (!bird.isRaising)
 		{
 			DrawTexture(bird.textureOne, static_cast<int>(bird.pos.x), static_cast<int>(bird.pos.y), RAYWHITE);
@@ -203,10 +218,12 @@ void UpdateBird(Bird& bird, bool& isPaused, bool& isGameOver,Wall& firstPipe, Wa
 		if (!isPaused)
 		{
 			MoveBird(bird);
+					
 			if (BirdPassesObstacle(bird, firstPipe) || BirdPassesObstacle(bird, secondPipe)) {
 				if (!bird.passedObstacle) {  // Si el obstáculo no ha sido pasado previamente
 					bird.passedObstacle = true;  // Marcar que se pasó el obstáculo
 					bird.score += 100;  // Incrementar el puntaje
+
 					cout<<bird.score<<endl;  // Incrementar el puntaje
 				}
 			}
@@ -248,9 +265,10 @@ void UpdateBird(Bird& bird, bool& isPaused, bool& isGameOver,Wall& firstPipe, Wa
 			timeSinceLastCollision += GetFrameTime(); // Incrementar el tiempo transcurrido
 			if (bird.lives <= 0)
 			{
+		
 				isGameOver = true;
 				ResetWall(firstPipe, secondPipe);
-				InitBird(bird);
+				ResetBird(bird);
 			}
 		}
 	}
@@ -267,14 +285,13 @@ void UpdateBird_2(Bird& bird, bool& isPaused, bool& isGameOver, Wall& firstPipe,
 		{
 			MoveBird_2(bird);
 			if (BirdPassesObstacle(bird, firstPipe) || BirdPassesObstacle(bird, secondPipe)) {
-				if (!bird.passedObstacle) {  // Si el obstáculo no ha sido pasado previamente
-					bird.passedObstacle = true;  // Marcar que se pasó el obstáculo
-					bird.score += 100;  // Incrementar el puntaje
-					cout << bird.score << endl;  // Incrementar el puntaje
+				if (!bird.passedObstacle) {  
+					bird.passedObstacle = true;  
+					cout << bird.score << endl;  
 				}
 			}
 			else {
-				bird.passedObstacle = false;  // Resetear el marcador si no se pasa el obstáculo
+				bird.passedObstacle = false;  
 			}
 			if (bird.pos.y > GetScreenHeight())
 			{
@@ -308,12 +325,12 @@ void UpdateBird_2(Bird& bird, bool& isPaused, bool& isGameOver, Wall& firstPipe,
 				}
 			}
 
-			timeSinceLastCollision += GetFrameTime(); // Incrementar el tiempo transcurrido
+			timeSinceLastCollision += GetFrameTime(); 
 			if (bird.lives <= 0)
 			{
 				isGameOver = true;
 				ResetWall(firstPipe, secondPipe);
-				InitBird(bird);
+				ResetBird(bird);
 			}
 		}
 	}
@@ -322,10 +339,10 @@ void UpdateBird_2(Bird& bird, bool& isPaused, bool& isGameOver, Wall& firstPipe,
 
 bool BirdPassesObstacle(Bird bird, Wall& pipe) 
 {
-	// Comprueba si el pájaro ha pasado la tubería en función de sus posiciones
+	
 	if (bird.pos.x > pipe.topPosition.x + pipe.width) {
-		return true; // El pájaro ha pasado esta tubería
+		return true; 
 	}
 
-	return false; // El pájaro aún no ha pasado esta tubería
+	return false; 
 }

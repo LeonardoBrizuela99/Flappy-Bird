@@ -18,7 +18,7 @@ struct Bird
 	short int lives;
 	float aceleration;
 	float gravity;
-	float score;
+	int score;
 	bool hasPlayedFallSound;
 	bool hasloseLife;
 	bool passedObstacle;
@@ -34,6 +34,7 @@ static bool limitJump = false;
 
 
 Bird InitBird(Bird& bird);
+Bird ResetBird(Bird& bird);
 Bird RestartBird(Bird& bird);
 Bird CreateBird(Texture2D birdTextureOne, Texture2D birdTextureTwo, Sound jumpSound, Sound fall, Sound loseLife);
 void DrawBird(Bird& bird, bool& isPaused);

@@ -4,6 +4,9 @@
 #include"screenManager/screenGameplay.h"
 namespace game
 {
+
+		
+	
 	struct GameTextures
 	{
 		    Texture2D foreground ;
