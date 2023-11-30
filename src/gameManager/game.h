@@ -4,9 +4,6 @@
 #include"screenManager/screenGameplay.h"
 namespace game
 {
-
-		
-	
 	struct GameTextures
 	{
 		    Texture2D foreground ;
@@ -27,11 +24,7 @@ namespace game
 		RectangleButton rulesButton ;
 		RectangleButton creditsButton ;
 		RectangleButton exitButton;
-		RectangleButton continueButton ;
-		RectangleButton creditsOne;
-		RectangleButton creditsTwo ;
-		RectangleButton creditsThree ;
-		RectangleButton creditsFour ;
+		RectangleButton continueButton;
 		RectangleButton restartButton ;
 
 	};
@@ -41,9 +34,8 @@ namespace game
 		Sound fallSound;
 		Sound loseLife;
 		Sound lose;
+		Sound pause;
 	};
 	
 	void runGame();
-	
-
 }

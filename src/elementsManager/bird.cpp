@@ -220,15 +220,14 @@ void UpdateBird(Bird& bird, bool& isPaused, bool& isGameOver,Wall& firstPipe, Wa
 			MoveBird(bird);
 					
 			if (BirdPassesObstacle(bird, firstPipe) || BirdPassesObstacle(bird, secondPipe)) {
-				if (!bird.passedObstacle) {  // Si el obstáculo no ha sido pasado previamente
-					bird.passedObstacle = true;  // Marcar que se pasó el obstáculo
-					bird.score += 100;  // Incrementar el puntaje
-
-					cout<<bird.score<<endl;  // Incrementar el puntaje
+				if (!bird.passedObstacle) { 
+					bird.passedObstacle = true;  
+					bird.score += 100;  
+					
 				}
 			}
 			else {
-				bird.passedObstacle = false;  // Resetear el marcador si no se pasa el obstáculo
+				bird.passedObstacle = false;  
 			}
 			if (bird.pos.y > GetScreenHeight())
 			{
@@ -262,7 +261,7 @@ void UpdateBird(Bird& bird, bool& isPaused, bool& isGameOver,Wall& firstPipe, Wa
 				}
 			}
 
-			timeSinceLastCollision += GetFrameTime(); // Incrementar el tiempo transcurrido
+			timeSinceLastCollision += GetFrameTime();
 			if (bird.lives <= 0)
 			{
 		

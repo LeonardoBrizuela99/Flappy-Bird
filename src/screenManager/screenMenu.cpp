@@ -17,7 +17,7 @@ void drawMenu(	RectangleButton& playButton,
 
 	DrawText("FLAPPY BIRD", (GetScreenWidth() / 2) - 200, (GetScreenHeight() / 2 - 300), 60, WHITE);
 
-	DrawText("Version 0.3", GetScreenWidth() - 120, GetScreenHeight() - 30, 20, WHITE);
+	DrawText("Version 1.0", GetScreenWidth() - 120, GetScreenHeight() - 30, 20, WHITE);
 
 	multiplayerButton.pos.x = (GetScreenWidth() / 2) - (multiplayerButton.size.x / 2);
 	multiplayerButton.pos.y = static_cast<float>(GetScreenHeight() / 2-113) - (multiplayerButton.size.y);

@@ -41,9 +41,14 @@ namespace game
 		const int screenHeight = 768;
 
 		bool isPaused = false;
+		bool musicPaused = false;
 	    bool isGameOver = false;
 		InitWindow(screenWidth, screenHeight, "Flappy Bird");
 		InitAudioDevice();
+		Music music = LoadMusicStream("res/sounds/snowfall-final.mp3");
+		Music musicGameplay = LoadMusicStream("res/sounds/music.mp3");
+		PlayMusicStream(music);
+		PlayMusicStream(musicGameplay);
 		SoundsGame soundsGame;
 		InitSounds(soundsGame);
 		GameTextures gameTextures;
@@ -72,29 +77,33 @@ namespace game
 		{
 			SetExitKey(NULL);
 
+				
 			BeginDrawing();
 			ClearBackground(BLACK);
-			
 			Vector2 mouse = { static_cast<float>(GetMouseX()), static_cast<float>(GetMouseY()) };
 			switch (currentScreen)
 			{
 			case GameScreen::MENU:
+				
+				UpdateMusicStream(music);
 				GameScreenMenu(gameButtons, currentScreen, mouse);
 				break;
 			case GameScreen::MULTIPLAYER:
 
+				UpdateMusicStream(musicGameplay);
 				GameScreenMultiplayer(soundsGame, bird,bird2, firstWall, secondWall, isPaused,isGameOver, gameButtons, gameTextures, currentScreen, mouse);
 				
 				break;
 			case GameScreen::GAMEPLAY:
-				
+				UpdateMusicStream(musicGameplay);
 				GameScreenSingleplayer(soundsGame,bird, firstWall,secondWall, isPaused,isGameOver,gameButtons,gameTextures, currentScreen, mouse);
 				break;
 			case GameScreen::RULES:
-				
+				UpdateMusicStream(music);
 				GameScreenRules(gameButtons,currentScreen,mouse);
 				break;
 			case GameScreen::CREDITS:
+				UpdateMusicStream(music);
 				GameScreenCredits(gameButtons, currentScreen, mouse);
 				break;
 			case GameScreen::EXIT:
@@ -106,6 +115,8 @@ namespace game
 			EndDrawing();
 		}
 		
+		UnloadMusicStream(music);
+		UnloadMusicStream(musicGameplay);
 		DeInitSounds(soundsGame);
 		CloseAudioDevice();
 		DeInitTextures(gameTextures);
@@ -128,6 +139,7 @@ namespace game
 		soundsGame.fallSound=LoadSound("res/sounds/fall.wav");
 		soundsGame.loseLife=LoadSound("res/sounds/loseLife.wav");
 		soundsGame.lose=LoadSound("res/sounds/lose.wav");
+		soundsGame.pause=LoadSound("res/sounds/pop.wav");
 
 	}
 	void DeInitTextures(GameTextures& gameTextures)
@@ -147,10 +159,10 @@ namespace game
 		UnloadSound(soundsGame.fallSound);
 		UnloadSound(soundsGame.loseLife);
 		UnloadSound(soundsGame.lose);
+		UnloadSound(soundsGame.pause);
 	}
 	void PauseScreen(GameRectangleButton& gameButtons, Vector2& mouse,bool& isPaused)
 	{
-		//int fontSize = 40;
 		if (isPaused)
 		{
 			DrawRectangle((GetScreenWidth() / 2) - 300, GetScreenHeight() / 2 - 200, 600, 500, BLACK);
@@ -352,10 +364,6 @@ namespace game
 		gameButtons.creditsButton = {};
 		gameButtons.exitButton = {};
 		gameButtons.continueButton = {};
-		gameButtons.creditsOne = {};
-		gameButtons.creditsTwo = {};
-		gameButtons.creditsThree = {};
-		gameButtons.creditsFour = {};
 		gameButtons.restartButton = {};
 
 		gameButtons.playButton = initButton(gameButtons.playButton, buttonSize);
@@ -366,10 +374,7 @@ namespace game
 		gameButtons.exitButton = initButton(gameButtons.exitButton, buttonSize);
 		gameButtons.continueButton = initButton(gameButtons.continueButton, buttonSize);
 		gameButtons.backButton = initButton(gameButtons.backButton, buttonSize);
-		gameButtons.creditsOne = initButton(gameButtons.creditsOne, buttonSize);
-		gameButtons.creditsTwo = initButton(gameButtons.creditsTwo, buttonSize);
-		gameButtons.creditsThree = initButton(gameButtons.creditsThree, buttonSize);
-		gameButtons.creditsFour = initButton(gameButtons.creditsFour, buttonSize);
+	
 
 	}
 	void GameScreenMenu(GameRectangleButton& gameButtons, GameScreen& currentScreen, Vector2& mouse)
@@ -402,19 +407,26 @@ namespace game
 	{
 		if (isPaused)
 		{
+			static bool pauseSound = false;
+			if (!pauseSound)
+			{
+				PlaySound(soundsGame.pause);
+				pauseSound = true;
+			}
 
 			if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && gameButtons.backButton.isSelected == true)
 			{
 				InitBird(bird);
 				InitBird(bird2);
 				ResetWall(firstWall, secondWall);
-
+				pauseSound = false;
 				currentScreen = GameScreen::MENU;
 				isPaused = false;
 			}
 			else if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && gameButtons.continueButton.isSelected == true)
 			{
 				isPaused = false;
+				pauseSound = false;
 
 			}
 			else if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && gameButtons.restartButton.isSelected == true)
@@ -422,6 +434,7 @@ namespace game
 				InitBird(bird2);
 				ResetWall(firstWall, secondWall);
 				isPaused = false;
+				pauseSound = false;
 
 			}
 
@@ -429,6 +442,7 @@ namespace game
 		if (isGameOver)
 		{
 			static bool hasPlayedLoseSound = false;
+
 			DrawText(TextFormat(" Score: %i", bird.score), 0, 0, 40, WHITE);
 			if (!hasPlayedLoseSound)
 			{
@@ -460,6 +474,7 @@ namespace game
 		if (IsKeyPressed(KEY_ESCAPE))
 		{
 			isPaused = !isPaused;
+			PlaySound(soundsGame.pause);
 		}
 		else
 		{
@@ -482,22 +497,29 @@ namespace game
 	{
 		if (isPaused)
 		{
+			static bool pauseSound = false;
+			if (!pauseSound)
+			{
+				PlaySound(soundsGame.pause);
+				pauseSound = true;
+			}
 			if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && gameButtons.backButton.isSelected == true)
 			{
 				InitBird(bird);
 				ResetWall(firstWall, secondWall);
 
-
+				pauseSound = false;
 				currentScreen = GameScreen::MENU;
 				isPaused = false;
 			}
 			else if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && gameButtons.continueButton.isSelected == true)
 			{
 				isPaused = false;
-
+				pauseSound = false;
 			}
 			else if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && gameButtons.restartButton.isSelected == true)
 			{
+				pauseSound =false;
 				InitBird(bird);
 				ResetWall(firstWall, secondWall);
 				isPaused = false;
@@ -543,6 +565,7 @@ namespace game
 		if (IsKeyPressed(KEY_ESCAPE))
 		{
 			isPaused=!isPaused;
+			PlaySound(soundsGame.pause);
 		}
 		else
 		{
@@ -572,7 +595,7 @@ namespace game
 	}
 	void GameScreenCredits(GameRectangleButton& gameButtons, GameScreen& currentScreen, Vector2& mouse)
 	{
-		drawCredits(gameButtons.backButton, gameButtons.creditsOne, gameButtons.creditsTwo, gameButtons.creditsThree, gameButtons.creditsFour, mouse);
+		drawCredits(gameButtons.backButton, mouse);
 		if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && gameButtons.backButton.isSelected == true)
 		{
 			currentScreen = GameScreen::MENU;
