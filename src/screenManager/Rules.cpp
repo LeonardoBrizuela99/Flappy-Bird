@@ -1,15 +1,7 @@
 #include "Rules.h"
 #include"utilsManager/rectangleButton.h"
 
-//static Vector2 mouse;
-//static RectangleButton backButton = {};
-//RectangleButton rulesButton = {};
-//Vector2 buttonSize = { 220, 50 };
 
-//void init()
-//{
-//    mouse = { static_cast<float>(GetMouseX()), static_cast<float>(GetMouseY()) };
-//}
 
 void drawRules(RectangleButton& backButton, Vector2 mouse)
 {
@@ -23,9 +15,6 @@ void drawRules(RectangleButton& backButton, Vector2 mouse)
 
         DrawText("RULES", (GetScreenWidth() / 2) - 120, (GetScreenHeight() / 2) - 140, 60, WHITE);
 
-       // DrawText("Ezequiel Prieto", (GetScreenWidth() / 2) - 200, (GetScreenHeight() / 2) - 20, fontSize, WHITE);
-
-        //DrawText("Fiorella Gaston", (GetScreenWidth() / 2) - 200, (GetScreenHeight() / 2) + 20, fontSize, WHITE);
 
         backButton.pos.x = static_cast<float>((GetScreenWidth() / 2) - 270);
         backButton.pos.y = static_cast<float>((GetScreenHeight() / 2) + 80);

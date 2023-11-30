@@ -1,17 +1,20 @@
 #pragma once
 #include "raylib.h"
 
-struct Wall
-{
-	Vector2 pos;
-	Vector2 size;
-	Color color;
-	int minHeight;
-	int maxHeight;
-	float speed;
-	bool hit;
-};
+	struct Wall
+	{
+		Vector2 topPosition = { 0, 0 };
+		Vector2 botPosition = { 0, 0 };
 
-void initWall(Wall& wall);
+		float separation = 160.0f;
 
-void initWall(Wall& wall, Vector2 posOffset);
+		float speed = 0.0f;
+		float topHeight = 0.0f;
+		float botHeight = 0.0f;
+		float width = 0.0f;
+	};
+
+	Wall InitWall(float xPos);
+	void UpdateWall(Wall& wall,bool& isPaused,bool& isGameOver);
+	void DrawWall(Wall wall);
+	void ResetWall(Wall& firstWall, Wall& secondWall); 
